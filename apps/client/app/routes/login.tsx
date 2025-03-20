@@ -4,10 +4,10 @@ import type { Route } from "./+types/login";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Start your experience with aegis" },
+    { title: "aegis - Login" },
     {
       name: "description",
-      content: "Login to aegis.",
+      content: "Start your experience with aegis today, right now!",
     },
   ];
 }
