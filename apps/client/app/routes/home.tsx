@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "aegis - Secure Password Generator and Manager" },
+    { title: "Aegis - Secure Password Generator and Manager" },
     {
       name: "description",
       content:
