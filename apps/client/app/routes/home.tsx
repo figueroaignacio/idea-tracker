@@ -14,7 +14,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <section className="text-center min-h-[70dvh] flex flex-col justify-center gap-y-3">
-      <h1 className="text-2xl font-bold">aegis.</h1>
+      <h1 className="text-2xl font-bold">Aegis.</h1>
       <p>Your best companion for managing and generating secure passwords.</p>
     </section>
   );
