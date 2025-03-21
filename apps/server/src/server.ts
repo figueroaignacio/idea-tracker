@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
-import app from "./app";
+import { App } from "./app";
 import aegisLog from "./utils/logger";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const server = new App(PORT);
 
-app.listen(PORT, () => {
-  aegisLog();
-});
+server.listen();
+aegisLog();
