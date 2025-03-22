@@ -13,11 +13,12 @@
 .dark {
   --background: hsl(220, 43%, 11%);
   --foreground: hsl(0, 0%, 92%);
-  --primary: hsl(174, 80%, 25%);
-  --secondary: hsl(210, 50%, 40%);
+  --primary: hsl(216, 31%, 17%);
+  --secondary: hsl(175, 100%, 42%);
   --muted-secondary: hsl(190, 30%, 55%);
   --destructive: hsl(0, 72%, 45%);
-  --border: hsl(215, 32%, 20%);
+  --card: hsl(216, 35%, 14%);
+  --border: hsl(217, 21%, 27%);
 }
 
 @theme inline {
@@ -30,7 +31,7 @@
   --color-muted-secondary: var(--muted-secondary);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
-  --radius-md: 0.75rem;
+  --color-card: var(--card);
 }
 
 html,

@@ -54,7 +54,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[60dvh] bg-gray-900 text-white flex flex-col">
+    <div className="min-h-[60dvh] flex flex-col">
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-8">
@@ -85,13 +85,13 @@ export default function Login() {
             </div>
           )}
 
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 shadow-xl">
+          <div className="bg-card backdrop-blur-sm rounded-xl border border-border p-6 shadow-xl">
             <div className="flex items-center justify-center mb-6">
-              <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center">
                 <LockKeyhole className="w-5 h-5 text-cyan-400" />
               </div>
               <div className="h-0.5 w-16 bg-gradient-to-r from-gray-700/0 via-gray-700 to-gray-700/0"></div>
-              <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center">
                 <Shield className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
