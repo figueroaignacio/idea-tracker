@@ -1,14 +1,8 @@
-import {
-  AlertCircle,
-  ExternalLink,
-  Github,
-  Loader2,
-  LockKeyhole,
-  Shield,
-} from "lucide-react";
+import { AlertCircle, LockKeyhole, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { Logo } from "~/components/logo";
+import { AuthProviders } from "~/modules/auth/components/auth-providers";
 import type { Route } from "./+types/login";
 
 export function meta({}: Route.MetaArgs) {
@@ -47,12 +41,6 @@ export default function Login() {
     checkAuthStatus();
   }, [navigate]);
 
-  const handleGitHubLogin = () => {
-    setLoading(true);
-    setActiveProvider("github");
-    window.location.href = "http://localhost:3000/api/auth/github";
-  };
-
   return (
     <div className="min-h-[60dvh] flex flex-col">
       <main className="flex-1 flex items-center justify-center p-4">
@@ -64,7 +52,7 @@ export default function Login() {
             <h1 className="text-3xl font-bold mb-2">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
                 AEGIS
-              </span>{" "}
+              </span>
               Secure Login
             </h1>
             <p className="text-gray-400 max-w-sm mx-auto">
@@ -95,81 +83,7 @@ export default function Login() {
                 <Shield className="w-5 h-5 text-emerald-400" />
               </div>
             </div>
-
-            <div className="space-y-4">
-              <button
-                className={`relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-750 transition-all ${
-                  loading && activeProvider === "github"
-                    ? "opacity-80"
-                    : "hover:border-cyan-500/50"
-                }`}
-                onClick={handleGitHubLogin}
-                disabled={loading}
-              >
-                <div className="absolute left-4 flex items-center justify-center">
-                  {loading && activeProvider === "github" ? (
-                    <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
-                  ) : (
-                    <Github className="w-5 h-5 text-white" />
-                  )}
-                </div>
-                <span
-                  className={
-                    loading && activeProvider === "github"
-                      ? "text-gray-400"
-                      : ""
-                  }
-                >
-                  Continue with GitHub
-                </span>
-                <ExternalLink className="w-4 h-4 text-gray-500 absolute right-4" />
-              </button>
-
-              <button
-                className="relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800/50 cursor-not-allowed opacity-60"
-                disabled
-              >
-                <div className="absolute left-4 flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-5 h-5 text-white"
-                  >
-                    <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
-                  </svg>
-                </div>
-                <span>Continue with Google</span>
-                <div className="absolute right-4 bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
-                  Soon
-                </div>
-              </button>
-
-              <button
-                className="relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800/50 cursor-not-allowed opacity-60"
-                disabled
-              >
-                <div className="absolute left-4 flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-5 h-5 text-white"
-                  >
-                    <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z" />
-                  </svg>
-                </div>
-                <span>Continue with Microsoft</span>
-                <div className="absolute right-4 bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
-                  Soon
-                </div>
-              </button>
-            </div>
-
+            <AuthProviders />
             <div className="mt-6 text-center">
               <p className="text-xs text-gray-500">
                 By continuing, you agree to our{" "}
