@@ -4,10 +4,10 @@ import type { Route } from "./+types/dashboard";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "aegis - Dashboard" },
+    { title: "Aegis - Dashboard" },
     {
       name: "description",
-      content: "Your aegis dashboard",
+      content: "Your Aegis dashboard",
     },
   ];
 }

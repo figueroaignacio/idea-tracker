@@ -1,15 +1,23 @@
-"use client";
-
+import {
+  AlertCircle,
+  ExternalLink,
+  Github,
+  Loader2,
+  LockKeyhole,
+  Shield,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
+import { Logo } from "~/components/logo";
 import type { Route } from "./+types/login";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "aegis - Login" },
+    { title: "AEGIS - Secure Login" },
     {
       name: "description",
-      content: "Start your experience with aegis today, right now!",
+      content:
+        "Access your secure AEGIS password vault with trusted authentication providers.",
     },
   ];
 }
@@ -19,6 +27,7 @@ export default function Login() {
   const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [activeProvider, setActiveProvider] = useState<string | null>(null);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -40,78 +49,157 @@ export default function Login() {
 
   const handleGitHubLogin = () => {
     setLoading(true);
+    setActiveProvider("github");
     window.location.href = "http://localhost:3000/api/auth/github";
   };
 
   return (
-    <section className="text-center min-h-[70dvh] flex flex-col justify-center gap-y-3">
-      <h1 className="text-2xl font-bold">Login</h1>
-      <p className="text-gray-600 mb-6">Sign in with your preferred provider</p>
+    <div className="min-h-[60dvh] bg-gray-900 text-white flex flex-col">
+      <main className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-md relative z-10">
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <Logo />
+            </div>
+            <h1 className="text-3xl font-bold mb-2">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
+                AEGIS
+              </span>{" "}
+              Secure Login
+            </h1>
+            <p className="text-gray-400 max-w-sm mx-auto">
+              Access your encrypted password vault with trusted authentication
+              providers
+            </p>
+          </div>
 
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      <div className="max-w-sm mx-auto w-full space-y-4">
-        <button
-          className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-xl border-[1px] border-white/15 cursor-pointer transition-opacity hover:opacity-80"
-          onClick={handleGitHubLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-            </svg>
+          {error && (
+            <div className="mb-6 bg-red-900/30 border border-red-500/50 rounded-lg p-4 flex items-start">
+              <AlertCircle className="w-5 h-5 text-red-400 mr-3 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-medium text-red-400">
+                  Authentication Error
+                </h3>
+                <p className="text-sm text-gray-300">{error}</p>
+              </div>
+            </div>
           )}
-          Continue with GitHub
-        </button>
 
-        <button
-          className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-xl border-[1px] border-white/15 cursor-not-allowed opacity-50"
-          disabled
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
-          </svg>
-          Continue with Google (Coming Soon)
-        </button>
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 p-6 shadow-xl">
+            <div className="flex items-center justify-center mb-6">
+              <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
+                <LockKeyhole className="w-5 h-5 text-cyan-400" />
+              </div>
+              <div className="h-0.5 w-16 bg-gradient-to-r from-gray-700/0 via-gray-700 to-gray-700/0"></div>
+              <div className="w-10 h-10 rounded-full bg-gray-700/50 flex items-center justify-center">
+                <Shield className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
 
-        <button
-          className="flex items-center justify-center gap-2 w-full py-2 px-4 rounded-xl border-[1px] border-white/15 cursor-not-allowed opacity-50"
-          disabled
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z" />
-          </svg>
-          Continue with Microsoft (Coming Soon)
-        </button>
-      </div>
+            <div className="space-y-4">
+              <button
+                className={`relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-750 transition-all ${
+                  loading && activeProvider === "github"
+                    ? "opacity-80"
+                    : "hover:border-cyan-500/50"
+                }`}
+                onClick={handleGitHubLogin}
+                disabled={loading}
+              >
+                <div className="absolute left-4 flex items-center justify-center">
+                  {loading && activeProvider === "github" ? (
+                    <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  ) : (
+                    <Github className="w-5 h-5 text-white" />
+                  )}
+                </div>
+                <span
+                  className={
+                    loading && activeProvider === "github"
+                      ? "text-gray-400"
+                      : ""
+                  }
+                >
+                  Continue with GitHub
+                </span>
+                <ExternalLink className="w-4 h-4 text-gray-500 absolute right-4" />
+              </button>
 
-      <p className="text-sm text-gray-500 mt-6">
-        By continuing, you agree to our Terms of Service and Privacy Policy
-      </p>
-    </section>
+              <button
+                className="relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800/50 cursor-not-allowed opacity-60"
+                disabled
+              >
+                <div className="absolute left-4 flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-5 h-5 text-white"
+                  >
+                    <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
+                  </svg>
+                </div>
+                <span>Continue with Google</span>
+                <div className="absolute right-4 bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
+                  Soon
+                </div>
+              </button>
+
+              <button
+                className="relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800/50 cursor-not-allowed opacity-60"
+                disabled
+              >
+                <div className="absolute left-4 flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-5 h-5 text-white"
+                  >
+                    <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z" />
+                  </svg>
+                </div>
+                <span>Continue with Microsoft</span>
+                <div className="absolute right-4 bg-gray-700 text-gray-300 text-xs px-2 py-0.5 rounded-full">
+                  Soon
+                </div>
+              </button>
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-xs text-gray-500">
+                By continuing, you agree to our{" "}
+                <a
+                  href="/terms"
+                  className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                >
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a
+                  href="/privacy"
+                  className="text-cyan-400 hover:text-cyan-300 hover:underline"
+                >
+                  Privacy Policy
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center justify-center p-1 rounded-full bg-gray-800/30 backdrop-blur-sm border border-gray-700/50">
+              <div className="flex items-center space-x-1 text-xs px-3 py-1">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="text-gray-400">Secure Authentication</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
