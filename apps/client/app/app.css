@@ -11,7 +11,7 @@
 }
 
 .dark {
-  --background: hsl(220, 60%, 4%);
+  --background: hsl(220, 43%, 11%);
   --foreground: hsl(0, 0%, 92%);
   --primary: hsl(174, 80%, 25%);
   --secondary: hsl(210, 50%, 40%);
