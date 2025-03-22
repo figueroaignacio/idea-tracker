@@ -1,12 +1,10 @@
 import { Link, Outlet } from "react-router";
+import { buttonVarians } from "~/components/ui/button";
 
 export default function AuthLayout() {
   return (
     <div className="container">
-      <Link
-        to="/"
-        className="border-[1px] border-white/15 px-4 py-2 rounded-xl cursor-pointer"
-      >
+      <Link to="/" className={buttonVarians({ variant: "ghost" })}>
         👈🏽 Back
       </Link>
       <Outlet />

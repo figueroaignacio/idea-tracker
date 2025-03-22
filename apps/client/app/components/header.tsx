@@ -1,14 +1,15 @@
 import { Link } from "react-router";
 import { Logo } from "./logo";
+import { buttonVarians } from "./ui/button";
 
 export function Header() {
   return (
-    <header className="border-b-[1px] border-white/15">
+    <header className="border-b-[1px] border-border">
       <div className="container flex justify-between items-center">
         <Logo />
         <Link
           to="/auth/login"
-          className="border-[1px] border-white/15 px-4 py-2 rounded-xl"
+          className={buttonVarians({ variant: "secondary" })}
         >
           Login
         </Link>
