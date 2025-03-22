@@ -35,8 +35,7 @@ export class App {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(
       session({
-        secret:
-          process.env.SESSION_SECRET || "secreto-del-gestor-de-contraseñas",
+        secret: process.env.SESSION_SECRET || "default_secret_key",
         resave: false,
         saveUninitialized: false,
         cookie: {
