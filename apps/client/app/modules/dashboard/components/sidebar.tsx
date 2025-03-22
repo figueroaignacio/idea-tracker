@@ -1,5 +1,5 @@
 // Components
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { Logo } from "~/components/logo";
 import { buttonVarians } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
@@ -8,6 +8,8 @@ import { Separator } from "~/components/ui/separator";
 import { sidebarLinks } from "../lib/navigation";
 
 export function Sidebar() {
+  const location = useLocation();
+
   return (
     <aside>
       <div className="border-r border-border min-h-dvh">
@@ -22,7 +24,9 @@ export function Sidebar() {
                 to={item.to}
                 className={`${buttonVarians({
                   variant: "ghost",
-                })} w-full justify-start space-x-4`}
+                })} w-full justify-start space-x-4 ${
+                  location.pathname === item.to ? "bg-primary" : ""
+                }`}
               >
                 {item.icon}
                 <span>{item.label}</span>
