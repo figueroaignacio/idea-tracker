@@ -32,7 +32,7 @@ export default function Login() {
               </span>
               Secure Login
             </h1>
-            <p className="text-gray-400 max-w-sm mx-auto">
+            <p className="text-foreground max-w-sm mx-auto">
               Access your encrypted password vault with trusted authentication
               providers
             </p>
@@ -62,7 +62,7 @@ export default function Login() {
             </div>
             <AuthProviders />
             <div className="mt-6 text-center">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-foreground">
                 By continuing, you agree to our{" "}
                 <a
                   href="/terms"
@@ -82,10 +82,10 @@ export default function Login() {
           </div>
 
           <div className="mt-8 text-center">
-            <div className="inline-flex items-center justify-center p-1 rounded-full bg-gray-800/30 backdrop-blur-sm border border-gray-700/50">
+            <div className="inline-flex items-center justify-center p-1 rounded-full bg-primary backdrop-blur-sm border border-border">
               <div className="flex items-center space-x-1 text-xs px-3 py-1">
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span className="text-gray-400">Secure Authentication</span>
+                <span className="text-foreground">Secure Authentication</span>
               </div>
             </div>
           </div>

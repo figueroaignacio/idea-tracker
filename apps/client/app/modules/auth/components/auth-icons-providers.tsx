@@ -25,7 +25,7 @@ function GoogleIconProvider() {
       height="20"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="w-5 h-5 text-white"
+      className="w-5 h-5"
     >
       <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
     </svg>
@@ -40,7 +40,7 @@ function MicrosoftIconProvider() {
       height="20"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="w-5 h-5 text-white"
+      className="w-5 h-5"
     >
       <path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zM24 11.4H12.6V0H24v11.4z" />
     </svg>

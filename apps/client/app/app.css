@@ -3,11 +3,12 @@
 :root {
   --background: hsl(210, 20%, 96%);
   --foreground: hsl(220, 20%, 15%);
-  --primary: hsl(174, 80%, 30%);
-  --secondary: hsl(210, 60%, 35%);
-  --muted-secondary: hsl(200, 30%, 50%);
-  --destructive: hsl(0, 72%, 40%);
+  --primary: hsl(212, 24%, 95%);
+  --secondary: hsl(175, 100%, 42%);
+  --muted-secondary: hsl(190, 30%, 40%);
+  --destructive: hsl(0, 72%, 45%);
   --border: hsl(220, 12%, 75%);
+  --card: hsl(212, 24%, 92%);
 }
 
 .dark {

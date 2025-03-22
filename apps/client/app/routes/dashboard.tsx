@@ -81,7 +81,7 @@ export default function Dashboard() {
       </div>
 
       {user && (
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <div className="bg-card shadow rounded-lg p-6">
           <div className="flex items-center space-x-4">
             {user.avatar && (
               <img
