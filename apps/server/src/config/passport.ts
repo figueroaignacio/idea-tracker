@@ -1,7 +1,7 @@
 import passport from "passport";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { UsersService } from "../services/auth.service";
+import { UsersService } from "../services/users.service";
 
 export class PassportConfig {
   private userService: UsersService;

@@ -7,7 +7,7 @@ import { AppDataSource } from "./config/database";
 import { PassportConfig } from "./config/passport";
 import { AuthRoutes } from "./routes/auth.routes";
 import { PasswordRoutes } from "./routes/password.routes";
-import { UsersService } from "./services/auth.service";
+import { UsersService } from "./services/users.service";
 
 export class App {
   private app: express.Application;
