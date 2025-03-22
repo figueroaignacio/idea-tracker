@@ -13,6 +13,11 @@ export default [
         route("login", "./routes/login.tsx"),
       ]),
     ]),
-    route("/dashboard", "./routes/dashboard.tsx"),
+    layout("./layout/dashboard-layout.tsx", [
+      route("/dashboard", "./routes/dashboard.tsx"),
+      route("/generator", "./routes/generator.tsx"),
+      route("/vault", "./routes/vault.tsx"),
+      route("/settings", "./routes/settings.tsx"),
+    ]),
   ]),
 ] satisfies RouteConfig;
