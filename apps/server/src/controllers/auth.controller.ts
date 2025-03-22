@@ -17,8 +17,8 @@ export class AuthController {
 
   githubAuthCallback(req: Request, res: Response): void {
     passport.authenticate("github", {
-      successRedirect: "/api/auth/profile",
-      failureRedirect: "/api/auth/providers",
+      successRedirect: "http://localhost:5173/dashboard",
+      failureRedirect: "http://localhost:5173/login",
     })(req, res);
   }
 
@@ -28,8 +28,8 @@ export class AuthController {
 
   googleAuthCallback(req: Request, res: Response): void {
     passport.authenticate("google", {
-      successRedirect: "/api/auth/profile",
-      failureRedirect: "/api/auth/providers",
+      successRedirect: "http://localhost:5173/dashboard",
+      failureRedirect: "http://localhost:5173/login",
     })(req, res);
   }
 
