@@ -1,6 +1,5 @@
 import { AlertCircle, LockKeyhole, Shield } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useState } from "react";
 import { Logo } from "~/components/logo";
 import { AuthProviders } from "~/modules/auth/components/auth-providers";
 import type { Route } from "./+types/login";
@@ -17,29 +16,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Login() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [activeProvider, setActiveProvider] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/auth/profile", {
-          credentials: "include",
-        });
-
-        if (response.ok) {
-          navigate("/dashboard");
-        }
-      } catch (error) {
-        console.error("Error checking authentication status:", error);
-      }
-    };
-
-    checkAuthStatus();
-  }, [navigate]);
 
   return (
     <div className="min-h-[60dvh] flex flex-col">
@@ -51,7 +28,7 @@ export default function Login() {
             </div>
             <h1 className="text-3xl font-bold mb-2">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-emerald-400">
-                AEGIS
+                AEGIS{" "}
               </span>
               Secure Login
             </h1>
