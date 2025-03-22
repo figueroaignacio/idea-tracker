@@ -8,7 +8,7 @@ export default function DashboardLayout() {
       <div className="hidden lg:block lg:col-span-1">
         <Sidebar />
       </div>
-      <div className="lg:col-span-5">
+      <div className="lg:col-span-5 container">
         <Outlet />
       </div>
     </div>

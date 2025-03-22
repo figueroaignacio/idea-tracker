@@ -72,7 +72,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container">
+    <>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <Button variant="destructive" onClick={handleLogout}>
@@ -100,6 +100,6 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
