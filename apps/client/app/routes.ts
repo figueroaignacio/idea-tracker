@@ -7,7 +7,6 @@ import {
 
 export default [
   layout("./layout/layout.tsx", [
-    route("/unauthorized-access", "./routes/unauthorized-access.tsx"),
     layout("./layout/lobby-layout.tsx", [route("/", "routes/home.tsx")]),
     ...prefix("auth", [
       layout("./layout/auth-layout.tsx", [
