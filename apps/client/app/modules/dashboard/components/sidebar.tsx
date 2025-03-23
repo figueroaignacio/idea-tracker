@@ -1,6 +1,3 @@
-// Hooks
-import { useAuth } from "~/modules/auth/context/auth-context";
-
 // Components
 import { Link, useLocation } from "react-router";
 import { Logo } from "~/components/logo";
@@ -13,7 +10,6 @@ import { sidebarLinks } from "../lib/navigation";
 
 export function Sidebar() {
   const location = useLocation();
-  const { user } = useAuth();
 
   return (
     <aside className="h-dvh flex flex-col">
