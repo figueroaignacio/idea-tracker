@@ -1,4 +1,4 @@
-// Componets
+// Components
 import { ArrowLeft } from "lucide-react";
 import { Link, Outlet } from "react-router";
 

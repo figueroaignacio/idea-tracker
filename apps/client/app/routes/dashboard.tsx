@@ -84,10 +84,7 @@ export default function Dashboard() {
         <div className="space-y-3 bg-card p-6 rounded-md border-border border">
           <h2 className="text-3xl font-bold">Welcome {user.name}</h2>
           <p className="text-sm text-foreground">
-            You are currently connected with:{" "}
-            <span className="border-border border py-1 rounded-full px-4">
-              {user.provider} provider
-            </span>
+            You are currently connected with {user.provider} provider
           </p>
         </div>
       )}
