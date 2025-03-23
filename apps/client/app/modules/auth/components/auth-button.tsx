@@ -1,4 +1,3 @@
-// Components
 import { ExternalLink, Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
@@ -6,17 +5,15 @@ interface AuthButtonProps {
   providerId: string;
   name: string;
   Icon: React.FC;
-  url: string;
   loading: boolean;
   activeProvider: string | null;
-  onLogin: (providerId: string, url: string) => void;
+  onLogin: (providerId: string) => void;
 }
 
 export function AuthButton({
   providerId,
   name,
   Icon,
-  url,
   loading,
   activeProvider,
   onLogin,
@@ -25,12 +22,12 @@ export function AuthButton({
 
   return (
     <Button
-      className={`relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-border bg-primary  transition-all ${
+      className={`relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-border transition-all ${
         isLoading ? "opacity-80" : "hover:border-cyan-500/50"
       }`}
-      variant="primary"
-      onClick={() => onLogin(providerId, url)}
-      disabled={loading}
+      variant="ghost"
+      onClick={() => onLogin(providerId)}
+      disabled={isLoading}
     >
       <div className="absolute left-4 flex items-center justify-center">
         {isLoading ? (

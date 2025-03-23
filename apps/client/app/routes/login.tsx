@@ -1,7 +1,12 @@
-import { AlertCircle, LockKeyhole, Shield } from "lucide-react";
+// Hooks
 import { useState } from "react";
+
+// Components
+import { AlertCircle, LockKeyhole, Shield } from "lucide-react";
 import { Logo } from "~/components/logo";
 import { AuthProviders } from "~/modules/auth/components/auth-providers";
+
+// Types
 import type { Route } from "./+types/login";
 
 export function meta({}: Route.MetaArgs) {

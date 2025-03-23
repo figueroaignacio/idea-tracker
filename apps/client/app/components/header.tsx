@@ -6,7 +6,11 @@ import { BackgroundPattern } from "./background-pattern";
 // Utils
 import { buttonVarians } from "./ui/button";
 
+import { useAuth } from "~/modules/auth/context/auth-context";
+
 export function Header() {
+  const { user } = useAuth();
+
   return (
     <header className="relative overflow-hidden bg-background border-b border-border">
       <BackgroundPattern />
@@ -19,12 +23,21 @@ export function Header() {
             </span>
           </div>
           <div>
-            <Link
-              to="auth/login"
-              className={buttonVarians({ variant: "primary" })}
-            >
-              Get Started
-            </Link>
+            {user ? (
+              <Link
+                to="auth/login"
+                className={buttonVarians({ variant: "primary" })}
+              >
+                Go to Dasboard
+              </Link>
+            ) : (
+              <Link
+                to="auth/login"
+                className={buttonVarians({ variant: "primary" })}
+              >
+                Get Started
+              </Link>
+            )}
           </div>
         </nav>
       </div>

@@ -1,6 +1,6 @@
 // Hooks
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useState } from "react";
+import { useAuth } from "../context/auth-context";
 
 // Components
 import { Button } from "~/components/ui/button";
@@ -16,61 +16,48 @@ const providersConfig = [
     id: "github",
     name: "GitHub",
     icon: GithubIconProvider,
-    url: "http://localhost:3000/api/auth/github",
+    method: "github",
   },
   {
     id: "google",
     name: "Google",
     icon: GoogleIconProvider,
-    url: "http://localhost:3000/api/auth/google",
+    method: "google",
   },
 ];
 
 export function AuthProviders() {
-  const navigate = useNavigate();
+  const { loginWithGitHub, loginWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
   const [activeProvider, setActiveProvider] = useState<string | null>(null);
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/auth/profile", {
-          credentials: "include",
-        });
-
-        if (response.ok) {
-          navigate("/dashboard");
-        }
-      } catch (error) {
-        console.error("Error checking authentication status:", error);
-      }
-    };
-
-    checkAuthStatus();
-  }, [navigate]);
-
-  const handleLogin = (providerId: string, url: string) => {
+  const handleLogin = (method: string) => {
     setLoading(true);
-    setActiveProvider(providerId);
-    window.location.href = url;
+    setActiveProvider(method);
+
+    if (method === "github") loginWithGitHub();
+    if (method === "google") loginWithGoogle();
+
+    setTimeout(() => {
+      setLoading(false);
+      setActiveProvider(null);
+    }, 3000);
   };
 
   return (
     <div className="space-y-4">
-      {providersConfig.map(({ id, name, icon: Icon, url }) => (
+      {providersConfig.map(({ id, name, icon: Icon, method }) => (
         <AuthButton
           key={id}
           providerId={id}
           name={name}
           Icon={Icon}
-          url={url}
+          onLogin={() => handleLogin(method)}
           loading={loading}
           activeProvider={activeProvider}
-          onLogin={handleLogin}
         />
       ))}
 
-      {/* Microsoft (Deshabilitado) */}
       <Button
         className="relative flex items-center justify-center gap-3 w-full py-3 px-4 rounded-lg border border-gray-700 bg-gray-800/50 cursor-not-allowed opacity-60"
         disabled
