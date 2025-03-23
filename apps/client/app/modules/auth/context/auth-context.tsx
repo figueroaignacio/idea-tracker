@@ -1,6 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { type User } from "~/modules/user/lib/definitions";
+import {
+  fetchUser,
+  loginWithGitHub,
+  loginWithGoogle,
+  logout,
+} from "../api/auth";
 
 interface AuthContextType {
   user: User | null;
@@ -18,53 +24,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/api/auth/profile", {
-          credentials: "include",
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
+    const initializeUser = async () => {
+      setLoading(true);
+      const user = await fetchUser();
+      setUser(user);
+      setLoading(false);
     };
 
-    fetchUser();
+    initializeUser();
   }, []);
 
-  const loginWithGitHub = () => {
-    window.location.href = "http://localhost:3000/api/auth/github";
-  };
-
-  const loginWithGoogle = () => {
-    window.location.href = "http://localhost:3000/api/auth/google";
-  };
-
-  const logout = async () => {
-    try {
-      await fetch("http://localhost:3000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      setUser(null);
-      navigate("/auth/login");
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+    navigate("/auth/login");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, loginWithGitHub, loginWithGoogle, logout }}
+      value={{
+        user,
+        loading,
+        loginWithGitHub,
+        loginWithGoogle,
+        logout: handleLogout,
+      }}
     >
       {children}
     </AuthContext.Provider>
