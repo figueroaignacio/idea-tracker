@@ -21,6 +21,7 @@ export function Sidebar() {
           <ul className="space-y-5">
             {sidebarLinks.map((item, index) => (
               <Link
+                key={index}
                 to={item.to}
                 className={`${buttonVarians({
                   variant: "ghost",
