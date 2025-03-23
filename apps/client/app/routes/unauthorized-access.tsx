@@ -1,8 +1,13 @@
+// Hooks
+import { useAuth } from "~/modules/auth/context/auth-context";
+
+// Components
 import { ExternalLink } from "lucide-react";
 import { Link, Navigate } from "react-router";
-import { buttonVarians } from "~/components/ui/button";
-import { useAuth } from "~/modules/auth/context/auth-context";
 import { Sidebar } from "~/modules/dashboard/components/sidebar";
+
+// Utils
+import { buttonVarians } from "~/components/ui/button";
 
 export default function UnauthorizedAccess() {
   const { user } = useAuth();

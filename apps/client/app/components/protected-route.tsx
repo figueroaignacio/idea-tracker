@@ -1,3 +1,4 @@
+// Components
 import { Navigate } from "react-router";
 import { useAuth } from "~/modules/auth/context/auth-context";
 

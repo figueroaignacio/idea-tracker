@@ -1,6 +1,12 @@
+// Hooks
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+
+// Components
 import { Button } from "~/components/ui/button";
+
+// Types
+import { type User } from "~/modules/user/lib/definitions";
 import type { Route } from "./+types/dashboard";
 
 export function meta({}: Route.MetaArgs) {
@@ -11,15 +17,6 @@ export function meta({}: Route.MetaArgs) {
       content: "Your Aegis dashboard",
     },
   ];
-}
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  avatar: string;
-  provider: string;
-  providerId: string;
 }
 
 export default function Dashboard() {

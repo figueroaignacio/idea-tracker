@@ -1,3 +1,6 @@
+// Hooks
+import { useAuth } from "~/modules/auth/context/auth-context";
+
 // Components
 import { Shield } from "lucide-react";
 import { Link } from "react-router";
@@ -5,8 +8,6 @@ import { BackgroundPattern } from "./background-pattern";
 
 // Utils
 import { buttonVarians } from "./ui/button";
-
-import { useAuth } from "~/modules/auth/context/auth-context";
 
 export function Header() {
   const { user } = useAuth();
