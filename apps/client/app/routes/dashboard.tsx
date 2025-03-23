@@ -76,28 +76,19 @@ export default function Dashboard() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <Button variant="destructive" onClick={handleLogout}>
-          Cerrar sesión
+          Log out
         </Button>
       </div>
 
       {user && (
-        <div className="bg-card shadow rounded-lg p-6">
-          <div className="flex items-center space-x-4">
-            {user.avatar && (
-              <img
-                src={user.avatar}
-                alt={`${user.name}'s avatar`}
-                className="w-16 h-16 rounded-full"
-              />
-            )}
-            <div>
-              <h2 className="text-xl font-bold">{user.name}</h2>
-              <p className="text-gray-500">{user.email}</p>
-              <p className="text-sm text-gray-400">
-                Conectado con {user.provider}
-              </p>
-            </div>
-          </div>
+        <div className="space-y-3 bg-card p-6 rounded-md border-border border">
+          <h2 className="text-3xl font-bold">Welcome {user.name}</h2>
+          <p className="text-sm text-foreground">
+            You are currently connected with:{" "}
+            <span className="border-border border py-1 rounded-full px-4">
+              {user.provider} provider
+            </span>
+          </p>
         </div>
       )}
     </>
