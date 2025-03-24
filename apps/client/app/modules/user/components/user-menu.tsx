@@ -1,9 +1,17 @@
-import { EllipsisVertical } from "lucide-react";
-import { Button } from "~/components/ui/button";
+// Hooks
 import { useAuth } from "~/modules/auth/context/auth-context";
 
+// Components
+import { EllipsisVertical } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+
 export function UserMenu() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   if (!user) return null;
 
@@ -15,9 +23,16 @@ export function UserMenu() {
           <p className="font-semibold">{user.name}</p>
           <p className="text-xs">{user.email}</p>
         </div>
-        <Button variant="ghost" className="rounded-full" size="sm">
-          <EllipsisVertical size={20} />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <EllipsisVertical size={20} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <Button variant="destructive" onClick={logout} className="w-full">
+              Log out
+            </Button>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

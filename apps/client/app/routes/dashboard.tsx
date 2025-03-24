@@ -1,9 +1,6 @@
 // Hooks
 import { useAuth } from "~/modules/auth/context/auth-context";
 
-// Components
-import { Button } from "~/components/ui/button";
-
 // Types
 import type { Route } from "./+types/dashboard";
 
@@ -18,7 +15,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Dashboard() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -32,9 +29,6 @@ export default function Dashboard() {
     <>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <Button variant="destructive" onClick={logout}>
-          Log out
-        </Button>
       </div>
 
       {user && (
