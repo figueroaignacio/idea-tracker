@@ -12,7 +12,7 @@ export function Sidebar() {
   const location = useLocation();
 
   return (
-    <aside className="h-dvh flex flex-col">
+    <aside className="h-dvh lg:flex flex-col hidden">
       <div className="border-r border-border flex flex-col flex-1">
         <div className="container flex justify-center">
           <Logo2 />
