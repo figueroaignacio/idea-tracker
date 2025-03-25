@@ -1,7 +1,12 @@
-import { Menu, Shield, X } from "lucide-react";
+// Hooks
 import { useState } from "react";
+
+// Components
+import { Menu, Shield, X } from "lucide-react";
 import { Link } from "react-router";
 import { BackgroundPattern } from "./background-pattern";
+
+// Utils
 import { buttonVarians } from "./ui/button";
 
 interface MobileMenuProps {
