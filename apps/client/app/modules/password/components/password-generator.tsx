@@ -11,6 +11,7 @@ import { StatusMessage } from "./status-message";
 
 // Utils
 import z from "zod";
+import { generatePassword } from "../api/password";
 import { passwordSchema } from "../lib/schemas";
 
 export function PasswordGenerator() {
@@ -20,22 +21,11 @@ export function PasswordGenerator() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const generatePassword = async () => {
+  const handlePasswordGeneration = async () => {
     try {
       setIsSubmitting(true);
-      const response = await fetch(
-        "http://localhost:3000/api/passwords/generate",
-        {
-          credentials: "include",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Error generating the password");
-      }
-
-      const data = await response.json();
-      setPassword(data.password);
+      const newPassword = await generatePassword(24);
+      setPassword(newPassword);
       setError("");
     } catch (err) {
       console.error("Error generating password:", err);
@@ -100,7 +90,7 @@ export function PasswordGenerator() {
           onSubmit={handleSubmit}
           isSubmitting={isSubmitting}
           password={password}
-          generatePassword={generatePassword}
+          generatePassword={handlePasswordGeneration}
         />
         <PasswordSecurityTips />
         <AuthenticationStatus />
