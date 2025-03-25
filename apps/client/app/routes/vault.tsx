@@ -1,6 +1,4 @@
-"use client";
-
-import { Check, Clipboard, Eye, EyeOff } from "lucide-react";
+import { Check, Clipboard, Eye, EyeOff, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { API } from "~/lib/api";
 import { useAuth } from "~/modules/auth/context/auth-context";
@@ -50,17 +48,14 @@ export default function Vault() {
     getPasswords();
   }, [user]);
 
-  // Alternar visibilidad de la contraseña
   const togglePasswordVisibility = (id: number) => {
     setVisiblePasswords((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Copiar al portapapeles con feedback visual
   const copyToClipboard = (text: string, id: number, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField({ id, field });
 
-    // Reset copied status after 2 seconds
     setTimeout(() => {
       setCopiedField(null);
     }, 2000);
@@ -82,7 +77,7 @@ export default function Vault() {
       <div className="p-6 max-w-4xl mx-auto text-center">
         <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
           <p className="text-amber-800 dark:text-amber-200">
-            No autorizado. Inicia sesión para ver tus contraseñas.
+            Unauthorized. Sign in to see your passwords.{" "}
           </p>
         </div>
       </div>
@@ -93,7 +88,7 @@ export default function Vault() {
     <div className="p-4 md:p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          Vault de Contraseñas
+          Passwords Vault
         </h1>
       </div>
 
@@ -106,7 +101,7 @@ export default function Vault() {
       {passwords.length === 0 && !error ? (
         <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
           <p className="text-gray-600 dark:text-gray-300">
-            No hay contraseñas guardadas.
+            There are no saved passwords.
           </p>
         </div>
       ) : (
@@ -115,13 +110,13 @@ export default function Vault() {
             <thead className="bg-gray-50 dark:bg-gray-800">
               <tr>
                 <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Título
+                  Title
                 </th>
                 <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Usuario
+                  Notes
                 </th>
                 <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Contraseña
+                  Password
                 </th>
               </tr>
             </thead>
@@ -211,6 +206,36 @@ export default function Vault() {
           </table>
         </div>
       )}
+      {/* Security Tips Section */}
+      <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center mb-4">
+          <InfoIcon className="h-6 w-6 text-blue-500 mr-3" />
+          <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+            Password Security Tips
+          </h4>
+        </div>
+        <ul className="text-sm text-gray-600 dark:text-gray-300 list-disc list-inside space-y-2">
+          <li>
+            Avoid using passwords with common words or easily guessable
+            sequences.
+          </li>
+          <li>
+            Create long passwords (at least 12 characters) with a mix of random
+            characters.
+          </li>
+          <li>
+            Use two-factor authentication (2FA) to protect your most important
+            accounts.
+          </li>
+          <li>Review your account privacy settings for added security.</li>
+          <li>
+            Use a password manager to generate and store secure passwords.
+          </li>
+          <li>
+            Avoid sharing your passwords or storing them in insecure places.
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
