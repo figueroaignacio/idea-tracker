@@ -107,7 +107,7 @@ export default function Vault() {
       ) : (
         <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-            <thead className="bg-gray-50 dark:bg-gray-800">
+            <thead className="bg-card">
               <tr>
                 <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Title
@@ -207,12 +207,10 @@ export default function Vault() {
         </div>
       )}
       {/* Security Tips Section */}
-      <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+      <div className="mt-8 p-4 bg-card rounded-lg border border-border">
         <div className="flex items-center mb-4">
           <InfoIcon className="h-6 w-6 text-blue-500 mr-3" />
-          <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-            Password Security Tips
-          </h4>
+          <h4 className="text-lg font-semibold">Password Security Tips</h4>
         </div>
         <ul className="text-sm text-gray-600 dark:text-gray-300 list-disc list-inside space-y-2">
           <li>
