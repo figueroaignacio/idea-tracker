@@ -25,6 +25,9 @@ export class Password {
   @Column({ nullable: true })
   website: string;
 
+  @Column()
+  provider: string;
+
   @Column({ nullable: true })
   notes: string;
 

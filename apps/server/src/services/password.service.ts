@@ -2,8 +2,10 @@ import * as crypto from "crypto";
 import { Repository } from "typeorm";
 import { AppDataSource } from "../config/database";
 import { Password } from "../models/password.entity";
+import { User } from "../models/user.entity";
 
 interface PasswordCreateDTO {
+  provider: string;
   title: string;
   username: string;
   password: string;
@@ -39,38 +41,77 @@ export class PasswordService {
   }
 
   private encrypt(text: string): string {
-    const cipher = crypto.createCipheriv(
-      "aes-256-cbc",
-      this.encryptionKey,
-      this.iv
-    );
-    let encrypted = cipher.update(text, "utf8", "hex");
-    encrypted += cipher.final("hex");
-    return encrypted;
+    try {
+      const key = crypto.scryptSync(
+        process.env.ENCRYPTION_KEY || "default-secret-key",
+        "salt",
+        32
+      );
+
+      const iv = crypto.randomBytes(16);
+
+      const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+
+      let encrypted = cipher.update(text, "utf8", "hex");
+      encrypted += cipher.final("hex");
+
+      return iv.toString("hex") + ":" + encrypted;
+    } catch (error) {
+      console.error("Encryption Error:", error);
+      throw new Error("Encryption failed");
+    }
   }
 
-  private decrypt(encrypted: string): string {
-    const decipher = crypto.createDecipheriv(
-      "aes-256-cbc",
-      this.encryptionKey,
-      this.iv
-    );
-    let decrypted = decipher.update(encrypted, "hex", "utf8");
-    decrypted += decipher.final("utf8");
-    return decrypted;
+  private decrypt(encryptedText: string): string {
+    try {
+      const [ivHex, encrypted] = encryptedText.split(":");
+
+      const key = crypto.scryptSync(
+        process.env.ENCRYPTION_KEY || "default-secret-key",
+        "salt",
+        32
+      );
+
+      const iv = Buffer.from(ivHex, "hex");
+
+      const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
+
+      let decrypted = decipher.update(encrypted, "hex", "utf8");
+      decrypted += decipher.final("utf8");
+
+      return decrypted;
+    } catch (error) {
+      console.error("Decryption Error:", error);
+      throw new Error("Decryption failed");
+    }
   }
 
   async createPassword(passwordData: PasswordCreateDTO): Promise<Password> {
-    const password = this.passwordRepository.create({
-      title: passwordData.title,
-      username: passwordData.username,
-      password: this.encrypt(passwordData.password),
-      website: passwordData.website,
-      notes: passwordData.notes,
-      user: { id: passwordData.userId },
-    });
+    try {
+      const userRepository = AppDataSource.getRepository(User);
+      const user = await userRepository.findOne({
+        where: { id: passwordData.userId },
+      });
 
-    return await this.passwordRepository.save(password);
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const password = this.passwordRepository.create({
+        provider: passwordData.provider,
+        title: passwordData.title,
+        username: passwordData.username,
+        password: this.encrypt(passwordData.password),
+        website: passwordData.website,
+        notes: passwordData.notes,
+        user: user,
+      });
+
+      return await this.passwordRepository.save(password);
+    } catch (error) {
+      console.error("Create Password Error:", error);
+      throw error;
+    }
   }
 
   async getAllUserPasswords(userId: number): Promise<Password[]> {

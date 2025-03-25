@@ -60,12 +60,8 @@ export class PasswordController {
       }
 
       const userId = (req.user as any).id;
-      const { title, username, password, website, notes } = req.body;
 
-      if (!title || !username || !password) {
-        res.status(400).json({ message: "Faltan campos obligatorios" });
-        return;
-      }
+      const { title, username, password, website, notes, provider } = req.body;
 
       const newPassword = await this.passwordService.createPassword({
         title,
@@ -74,11 +70,16 @@ export class PasswordController {
         website,
         notes,
         userId,
+        provider,
       });
 
       res.status(201).json(newPassword);
     } catch (error) {
-      res.status(500).json({ message: "Error al crear la contraseña", error });
+      console.error("Create Password Error:", error);
+      res.status(500).json({
+        message: "Error al crear la contraseña",
+        error: error instanceof Error ? error.message : error,
+      });
     }
   }
 
@@ -146,12 +147,10 @@ export class PasswordController {
       const passwordLength = length ? parseInt(length as string) : 16;
 
       if (passwordLength < 8 || passwordLength > 64) {
-        res
-          .status(400)
-          .json({
-            message:
-              "La longitud de la contraseña debe estar entre 8 y 64 caracteres",
-          });
+        res.status(400).json({
+          message:
+            "La longitud de la contraseña debe estar entre 8 y 64 caracteres",
+        });
         return;
       }
 
