@@ -1,5 +1,6 @@
 import { Check, Clipboard, Eye, EyeOff, InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { PageHeader } from "~/components/page-header";
 import { API } from "~/lib/api";
 import { useAuth } from "~/modules/auth/context/auth-context";
 
@@ -85,155 +86,156 @@ export default function Vault() {
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-5xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          Passwords Vault
-        </h1>
-      </div>
+    <>
+      <PageHeader title="Password Vault" />
+      <div className="max-w-5xl mx-auto page-container">
+        {error && (
+          <div className="mb-6 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <p className="text-red-700 dark:text-red-300">{error}</p>
+          </div>
+        )}
 
-      {error && (
-        <div className="mb-6 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
-          <p className="text-red-700 dark:text-red-300">{error}</p>
-        </div>
-      )}
-
-      {passwords.length === 0 && !error ? (
-        <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
-          <p className="text-gray-600 dark:text-gray-300">
-            There are no saved passwords.
-          </p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-            <thead className="bg-card">
-              <tr>
-                <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Notes
-                </th>
-                <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Password
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-              {passwords.map((entry, index) => (
-                <tr
-                  key={entry.id}
-                  className={`${
-                    index % 2 === 0
-                      ? "bg-white dark:bg-gray-900"
-                      : "bg-gray-50 dark:bg-gray-800/50"
-                  } hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                    {entry.title}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                    <div className="flex items-center space-x-2">
-                      <span className="truncate max-w-[150px]">
-                        {entry.username}
-                      </span>
-                      <button
-                        onClick={() =>
-                          copyToClipboard(entry.username, entry.id, "username")
-                        }
-                        className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                        title="Copiar usuario"
-                      >
-                        {copiedField?.id === entry.id &&
-                        copiedField?.field === "username" ? (
-                          <Check className="w-4 h-4 text-green-500" />
-                        ) : (
-                          <Clipboard className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
-                        )}
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-mono text-xs">
-                        {visiblePasswords[entry.id]
-                          ? entry.password
-                          : "••••••••"}
-                      </span>
-                      <div className="flex space-x-1">
+        {passwords.length === 0 && !error ? (
+          <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
+            <p className="text-gray-600 dark:text-gray-300">
+              There are no saved passwords.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+              <thead className="bg-card">
+                <tr>
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Title
+                  </th>
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Notes
+                  </th>
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Password
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
+                {passwords.map((entry, index) => (
+                  <tr
+                    key={entry.id}
+                    className={`${
+                      index % 2 === 0
+                        ? "bg-white dark:bg-gray-900"
+                        : "bg-gray-50 dark:bg-gray-800/50"
+                    } hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                      {entry.title}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                      <div className="flex items-center space-x-2">
+                        <span className="truncate max-w-[150px]">
+                          {entry.username}
+                        </span>
                         <button
-                          onClick={() => togglePasswordVisibility(entry.id)}
-                          className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                          title={
-                            visiblePasswords[entry.id]
-                              ? "Ocultar contraseña"
-                              : "Mostrar contraseña"
+                          onClick={() =>
+                            copyToClipboard(
+                              entry.username,
+                              entry.id,
+                              "username"
+                            )
                           }
+                          className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          title="Copiar usuario"
                         >
-                          {visiblePasswords[entry.id] ? (
-                            <EyeOff className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                          {copiedField?.id === entry.id &&
+                          copiedField?.field === "username" ? (
+                            <Check className="w-4 h-4 text-green-500" />
                           ) : (
-                            <Eye className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                            <Clipboard className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
                           )}
                         </button>
-                        {visiblePasswords[entry.id] && (
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-mono text-xs">
+                          {visiblePasswords[entry.id]
+                            ? entry.password
+                            : "••••••••"}
+                        </span>
+                        <div className="flex space-x-1">
                           <button
-                            onClick={() =>
-                              copyToClipboard(
-                                entry.password,
-                                entry.id,
-                                "password"
-                              )
-                            }
+                            onClick={() => togglePasswordVisibility(entry.id)}
                             className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                            title="Copiar contraseña"
+                            title={
+                              visiblePasswords[entry.id]
+                                ? "Ocultar contraseña"
+                                : "Mostrar contraseña"
+                            }
                           >
-                            {copiedField?.id === entry.id &&
-                            copiedField?.field === "password" ? (
-                              <Check className="w-4 h-4 text-green-500" />
+                            {visiblePasswords[entry.id] ? (
+                              <EyeOff className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
                             ) : (
-                              <Clipboard className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                              <Eye className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
                             )}
                           </button>
-                        )}
+                          {visiblePasswords[entry.id] && (
+                            <button
+                              onClick={() =>
+                                copyToClipboard(
+                                  entry.password,
+                                  entry.id,
+                                  "password"
+                                )
+                              }
+                              className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                              title="Copiar contraseña"
+                            >
+                              {copiedField?.id === entry.id &&
+                              copiedField?.field === "password" ? (
+                                <Check className="w-4 h-4 text-green-500" />
+                              ) : (
+                                <Clipboard className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                              )}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {/* Security Tips Section */}
+        <div className="mt-8 p-4 bg-card rounded-lg border border-border">
+          <div className="flex items-center mb-4">
+            <InfoIcon className="h-6 w-6 text-blue-500 mr-3" />
+            <h4 className="text-lg font-semibold">Password Security Tips</h4>
+          </div>
+          <ul className="text-sm text-gray-600 dark:text-gray-300 list-disc list-inside space-y-2">
+            <li>
+              Avoid using passwords with common words or easily guessable
+              sequences.
+            </li>
+            <li>
+              Create long passwords (at least 12 characters) with a mix of
+              random characters.
+            </li>
+            <li>
+              Use two-factor authentication (2FA) to protect your most important
+              accounts.
+            </li>
+            <li>Review your account privacy settings for added security.</li>
+            <li>
+              Use a password manager to generate and store secure passwords.
+            </li>
+            <li>
+              Avoid sharing your passwords or storing them in insecure places.
+            </li>
+          </ul>
         </div>
-      )}
-      {/* Security Tips Section */}
-      <div className="mt-8 p-4 bg-card rounded-lg border border-border">
-        <div className="flex items-center mb-4">
-          <InfoIcon className="h-6 w-6 text-blue-500 mr-3" />
-          <h4 className="text-lg font-semibold">Password Security Tips</h4>
-        </div>
-        <ul className="text-sm text-gray-600 dark:text-gray-300 list-disc list-inside space-y-2">
-          <li>
-            Avoid using passwords with common words or easily guessable
-            sequences.
-          </li>
-          <li>
-            Create long passwords (at least 12 characters) with a mix of random
-            characters.
-          </li>
-          <li>
-            Use two-factor authentication (2FA) to protect your most important
-            accounts.
-          </li>
-          <li>Review your account privacy settings for added security.</li>
-          <li>
-            Use a password manager to generate and store secure passwords.
-          </li>
-          <li>
-            Avoid sharing your passwords or storing them in insecure places.
-          </li>
-        </ul>
       </div>
-    </div>
+    </>
   );
 }

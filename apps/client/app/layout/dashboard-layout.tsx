@@ -8,11 +8,11 @@ export default function DashboardLayout() {
   return (
     <ProtectedRoute>
       <div className="min-h-dvh grid grid-cols-1 lg:grid-cols-9">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 hidden lg:flex">
           <Sidebar />
-          <MobileSidebar />
         </div>
-        <div className="lg:col-span-7 container">
+        <div className="lg:col-span-7">
+          <MobileSidebar />
           <Outlet />
         </div>
       </div>

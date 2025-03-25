@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { PageHeader } from "~/components/page-header";
 import { useAuth } from "~/modules/auth/context/auth-context";
 
 export default function Settings() {
@@ -9,5 +10,10 @@ export default function Settings() {
     navigate("/");
   }
 
-  return <div>Settings</div>;
+  return (
+    <>
+      <PageHeader title="Settings" />
+      <section className="page-container">Settings page</section>
+    </>
+  );
 }

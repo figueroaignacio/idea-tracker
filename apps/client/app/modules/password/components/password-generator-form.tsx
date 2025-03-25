@@ -32,7 +32,7 @@ export function PasswordGeneratorForm({
     setValue,
   } = useForm<PasswordFormData>({
     resolver: zodResolver(passwordSchema),
-    mode: "onSubmit", // Cambia el modo de validación
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
   });
 
