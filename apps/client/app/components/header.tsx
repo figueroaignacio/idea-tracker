@@ -1,16 +1,16 @@
-// Hooks
-import { useAuth } from "~/modules/auth/context/auth-context";
-
-// Components
 import { Shield } from "lucide-react";
 import { Link } from "react-router";
+import { useIsMobile } from "~/hooks/use-mobile";
+import { useAuth } from "~/modules/auth/context/auth-context";
 import { BackgroundPattern } from "./background-pattern";
-
-// Utils
+import { MobileMenu } from "./mobile-menu";
 import { buttonVarians } from "./ui/button";
 
 export function Header() {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
+
+  if (isMobile) return <MobileMenu user={user} />;
 
   return (
     <header className="relative overflow-hidden bg-background border-b border-border">
@@ -29,7 +29,7 @@ export function Header() {
                 to="auth/login"
                 className={buttonVarians({ variant: "primary" })}
               >
-                Go to Dasboard
+                Go to Dashboard
               </Link>
             ) : (
               <Link
