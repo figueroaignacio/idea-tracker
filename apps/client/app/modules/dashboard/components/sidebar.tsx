@@ -1,10 +1,10 @@
 // Components
 import { Link, useLocation } from "react-router";
-import { Logo } from "~/components/logo";
 import { Separator } from "~/components/ui/separator";
 import { UserMenu } from "~/modules/user/components/user-menu";
 
 // Lib
+import { Logo2 } from "~/components/logo-2";
 import { buttonVarians } from "~/components/ui/button";
 import { sidebarLinks } from "../lib/navigation";
 
@@ -14,8 +14,8 @@ export function Sidebar() {
   return (
     <aside className="h-dvh flex flex-col">
       <div className="border-r border-border flex flex-col flex-1">
-        <div className="container">
-          <Logo />
+        <div className="container flex justify-center">
+          <Logo2 />
         </div>
         <Separator />
         <nav className="container flex-1">
