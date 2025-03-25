@@ -14,11 +14,11 @@ export function Sidebar() {
   return (
     <aside className="h-screen lg:flex flex-col hidden sticky top-0">
       <div className="border-r border-border flex flex-col flex-1">
-        <div className="container flex justify-center py-5">
+        <div className="flex justify-center py-5">
           <Logo2 />
         </div>
         <Separator className="mb-5" />
-        <nav className="container flex-1">
+        <nav className=" flex-1">
           <ul className="space-y-5 px-5">
             {sidebarLinks.map((item, index) => (
               <Link

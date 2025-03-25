@@ -15,7 +15,7 @@ export function Header() {
   return (
     <header className="relative overflow-hidden bg-background border-b border-border">
       <BackgroundPattern />
-      <div className="container mx-auto px-4 py-6 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 py-6 relative z-10">
         <nav className="flex justify-between items-center">
           <div className="flex items-center">
             <Shield className="h-8 w-8 text-cyan-400 mr-2" />

@@ -4,7 +4,7 @@ import { Shield } from "lucide-react";
 export function HeroSection() {
   return (
     <div className="relative overflow-hidden">
-      <div className="container mx-auto px-4 py-24 sm:py-32 relative z-10">
+      <div className="container px-4 py-24 sm:py-32 relative z-10">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
           <div className="mb-6 flex items-center justify-center">
             <div className="relative">

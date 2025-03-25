@@ -19,7 +19,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
   return (
     <header className="relative overflow-hidden bg-background border-b border-border z-30">
       <BackgroundPattern />
-      <div className="container mx-auto px-4 py-6 relative z-10">
+      <div className=" mx-auto px-4 py-6 relative z-10">
         <nav className="flex justify-between items-center">
           <div className="flex items-center">
             <Shield className="h-8 w-8 text-cyan-400 mr-2" />
