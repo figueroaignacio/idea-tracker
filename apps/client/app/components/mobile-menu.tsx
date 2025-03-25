@@ -4,7 +4,11 @@ import { Link } from "react-router";
 import { BackgroundPattern } from "./background-pattern";
 import { buttonVarians } from "./ui/button";
 
-export function MobileMenu({ user }) {
+interface MobileMenuProps {
+  user: { name: string; email: string } | null;
+}
+
+export function MobileMenu({ user }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
