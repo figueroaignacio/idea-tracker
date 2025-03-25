@@ -10,6 +10,7 @@
   --destructive: hsl(0, 72%, 45%);
   --border: hsl(220, 12%, 75%);
   --card: hsl(212, 24%, 92%);
+  --muted-foreground: hsl(220, 15%, 40%);
 }
 
 .dark {
@@ -21,6 +22,7 @@
   --destructive: hsl(0, 72%, 45%);
   --card: hsl(216, 35%, 14%);
   --border: hsl(217, 21%, 27%);
+  --muted-foreground: hsl(240 3.8% 70%);
 }
 
 @theme inline {
@@ -34,6 +36,27 @@
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-card: var(--card);
+  --color-muted-foreground: var(--muted-foreground);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
 }
 
 html,
