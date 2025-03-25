@@ -66,7 +66,7 @@ body {
 
 @layer utilities {
   .container {
-    @apply py-12 px-3 max-w-6xl mx-auto;
+    @apply py-8 px-3 max-w-6xl mx-auto;
   }
 
   .page-container {

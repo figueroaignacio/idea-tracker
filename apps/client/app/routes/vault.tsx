@@ -1,8 +1,14 @@
-import { Check, Clipboard, Eye, EyeOff, InfoIcon } from "lucide-react";
+// Hooks
 import { useEffect, useState } from "react";
-import { PageHeader } from "~/components/page-header";
-import { API } from "~/lib/api";
 import { useAuth } from "~/modules/auth/context/auth-context";
+
+// Components
+import { Check, Clipboard, Eye, EyeOff, Trash2 } from "lucide-react";
+import { PageHeader } from "~/components/page-header";
+import { VaultSecurityTips } from "~/modules/vault/components/vault-security-tips";
+
+// Api
+import { API } from "~/lib/api";
 
 interface PasswordEntry {
   id: number;
@@ -16,6 +22,7 @@ export default function Vault() {
   const { user, loading } = useAuth();
   const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [visiblePasswords, setVisiblePasswords] = useState<{
     [key: number]: boolean;
   }>({});
@@ -49,6 +56,39 @@ export default function Vault() {
     getPasswords();
   }, [user]);
 
+  async function deletePassword(id: number) {
+    if (
+      window.confirm("¿Estás seguro de que deseas eliminar esta contraseña?")
+    ) {
+      try {
+        const response = await fetch(`${API}/passwords/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) throw new Error("Error al eliminar la contraseña");
+
+        // Remove the deleted password from the state
+        setPasswords((prevPasswords) =>
+          prevPasswords.filter((password) => password.id !== id)
+        );
+
+        // Show success message
+        setSuccessMessage("Contraseña eliminada correctamente.");
+
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 3000);
+      } catch (error) {
+        setError("No se pudo eliminar la contraseña");
+      }
+    }
+  }
+
   const togglePasswordVisibility = (id: number) => {
     setVisiblePasswords((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -66,8 +106,8 @@ export default function Vault() {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-          <div className="h-64 w-full max-w-3xl bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-8 w-64 bg-muted-secondary rounded mb-4"></div>
+          <div className="h-64 w-full max-w-3xl bg-muted-secondary dark:bg-muted-secondary rounded"></div>
         </div>
       </div>
     );
@@ -76,8 +116,8 @@ export default function Vault() {
   if (!user) {
     return (
       <div className="p-6 max-w-4xl mx-auto text-center">
-        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-          <p className="text-amber-800 dark:text-amber-200">
+        <div className="bg-secondary dark:bg-secondary border-border border rounded-lg p-4">
+          <p className="text-foreground dark:text-foreground">
             Unauthorized. Sign in to see your passwords.{" "}
           </p>
         </div>
@@ -90,47 +130,49 @@ export default function Vault() {
       <PageHeader title="Password Vault" />
       <div className="max-w-5xl mx-auto page-container">
         {error && (
-          <div className="mb-6 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <p className="text-red-700 dark:text-red-300">{error}</p>
+          <div className="mb-6 bg-destructive/10 dark:bg-destructive/20 border-destructive/20 border rounded-lg p-4">
+            <p className="text-destructive dark:text-destructive">{error}</p>
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="mb-6 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 border border-green-400 dark:border-green-500 rounded-lg p-4">
+            <p>{successMessage}</p>
           </div>
         )}
 
         {passwords.length === 0 && !error ? (
-          <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
-            <p className="text-gray-600 dark:text-gray-300">
+          <div className="bg-card dark:bg-card border-border border rounded-lg p-8 text-center">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               There are no saved passwords.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+          <div className="overflow-x-auto rounded-lg border border-border dark:border-border shadow-sm">
+            <table className="min-w-full divide-y divide-border dark:divide-border">
               <thead className="bg-card">
                 <tr>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Title
                   </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Notes
                   </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Password
+                  </th>
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
+                    Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
+              <tbody className="bg-background divide-y divide-border dark:divide-border">
                 {passwords.map((entry, index) => (
-                  <tr
-                    key={entry.id}
-                    className={`${
-                      index % 2 === 0
-                        ? "bg-white dark:bg-gray-900"
-                        : "bg-gray-50 dark:bg-gray-800/50"
-                    } hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors`}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  <tr key={entry.id} className={`hover:bg-primary`}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground dark:text-foreground">
                       {entry.title}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex items-center space-x-2">
                         <span className="truncate max-w-[150px]">
                           {entry.username}
@@ -143,19 +185,19 @@ export default function Vault() {
                               "username"
                             )
                           }
-                          className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          className="p-1 rounded-md hover:bg-muted-secondary transition-colors"
                           title="Copiar usuario"
                         >
                           {copiedField?.id === entry.id &&
                           copiedField?.field === "username" ? (
-                            <Check className="w-4 h-4 text-green-500" />
+                            <Check className="w-4 h-4 text-primary" />
                           ) : (
-                            <Clipboard className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                            <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground" />
                           )}
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex items-center space-x-2">
                         <span className="font-mono text-xs">
                           {visiblePasswords[entry.id]
@@ -165,7 +207,7 @@ export default function Vault() {
                         <div className="flex space-x-1">
                           <button
                             onClick={() => togglePasswordVisibility(entry.id)}
-                            className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            className="p-1 rounded-md  transition-colors"
                             title={
                               visiblePasswords[entry.id]
                                 ? "Ocultar contraseña"
@@ -173,9 +215,9 @@ export default function Vault() {
                             }
                           >
                             {visiblePasswords[entry.id] ? (
-                              <EyeOff className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                              <EyeOff className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
                             ) : (
-                              <Eye className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                              <Eye className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
                             )}
                           </button>
                           {visiblePasswords[entry.id] && (
@@ -187,19 +229,28 @@ export default function Vault() {
                                   "password"
                                 )
                               }
-                              className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                              className="p-1 rounded-md hover:bg-muted-secondary dark:hover:bg-muted-secondary transition-colors"
                               title="Copiar contraseña"
                             >
                               {copiedField?.id === entry.id &&
                               copiedField?.field === "password" ? (
-                                <Check className="w-4 h-4 text-green-500" />
+                                <Check className="w-4 h-4 text-primary" />
                               ) : (
-                                <Clipboard className="w-4 h-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" />
+                                <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
                               )}
                             </button>
                           )}
                         </div>
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                      <button
+                        onClick={() => deletePassword(entry.id)}
+                        className=""
+                        title="Delete password"
+                      >
+                        <Trash2 className="w-4 h-4 hover:text-destructive cursor-pointer" />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -207,34 +258,7 @@ export default function Vault() {
             </table>
           </div>
         )}
-        {/* Security Tips Section */}
-        <div className="mt-8 p-4 bg-card rounded-lg border border-border">
-          <div className="flex items-center mb-4">
-            <InfoIcon className="h-6 w-6 text-blue-500 mr-3" />
-            <h4 className="text-lg font-semibold">Password Security Tips</h4>
-          </div>
-          <ul className="text-sm text-gray-600 dark:text-gray-300 list-disc list-inside space-y-2">
-            <li>
-              Avoid using passwords with common words or easily guessable
-              sequences.
-            </li>
-            <li>
-              Create long passwords (at least 12 characters) with a mix of
-              random characters.
-            </li>
-            <li>
-              Use two-factor authentication (2FA) to protect your most important
-              accounts.
-            </li>
-            <li>Review your account privacy settings for added security.</li>
-            <li>
-              Use a password manager to generate and store secure passwords.
-            </li>
-            <li>
-              Avoid sharing your passwords or storing them in insecure places.
-            </li>
-          </ul>
-        </div>
+        <VaultSecurityTips />
       </div>
     </>
   );
