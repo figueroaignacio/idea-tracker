@@ -1,10 +1,15 @@
-import { Sidebar, X } from "lucide-react";
+// Hooks
 import { useState } from "react";
+
+// Components
+import { Sidebar, X } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { Logo2 } from "~/components/logo-2";
 import { buttonVarians } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { UserMenu } from "~/modules/user/components/user-menu";
+
+// Config
 import { sidebarLinks } from "../lib/navigation";
 
 export function MobileSidebar() {
