@@ -115,10 +115,15 @@ export class PasswordService {
   }
 
   async getAllUserPasswords(userId: number): Promise<Password[]> {
-    return await this.passwordRepository.find({
+    const passwords = await this.passwordRepository.find({
       where: { user: { id: userId } },
       order: { updatedAt: "DESC" },
     });
+
+    return passwords.map((password) => ({
+      ...password,
+      password: this.decrypt(password.password),
+    }));
   }
 
   async getPasswordById(id: number, userId: number): Promise<Password | null> {
