@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "turbo dev",
-    "build": "turbo build check-types"
+    "build": "turbo build check-types",
+    "start": "turbo start"
   },
   "keywords": [],
   "author": "",
