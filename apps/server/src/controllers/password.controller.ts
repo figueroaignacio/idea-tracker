@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
+import { PasswordRepository } from "../repositories/password.repository";
 import { PasswordService } from "../services/password.service";
 
 export class PasswordController {
   private passwordService: PasswordService;
 
   constructor() {
-    this.passwordService = new PasswordService();
+    const passwordRepository = new PasswordRepository();
+    this.passwordService = new PasswordService(passwordRepository);
   }
 
   async getAllPasswords(req: Request, res: Response): Promise<void> {
