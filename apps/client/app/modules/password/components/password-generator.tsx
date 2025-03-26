@@ -1,6 +1,5 @@
 // Hooks
 import { useState } from "react";
-import { useAuth } from "~/modules/auth/context/auth-context";
 
 // Components
 import { AuthenticationStatus } from "./authentication-status";
@@ -17,7 +16,6 @@ import { passwordSchema } from "../lib/schemas";
 import { generatePassword } from "../api/password";
 
 export function PasswordGenerator() {
-  const { user } = useAuth();
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
