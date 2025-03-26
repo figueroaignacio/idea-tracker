@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { PasswordRepository } from "../repositories/password.repository";
-import { PasswordService } from "../services/password.service";
+import { PasswordRepository } from "../repositories/password-repository";
+import { PasswordService } from "../services/password-service";
 
 export class PasswordController {
   private passwordService: PasswordService;

@@ -1,5 +1,5 @@
 import { CreateUserDTO } from "../dtos/user-dto";
-import { User } from "../models/user.entity";
+import { User } from "../models/user-entity";
 import { UserRepository } from "../repositories/user-repository";
 
 export class UsersService {

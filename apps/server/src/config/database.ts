@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
-import { Password } from "../models/password.entity";
-import { User } from "../models/user.entity";
+import { Password } from "../models/password-entity";
+import { User } from "../models/user-entity";
 
 dotenv.config();
 

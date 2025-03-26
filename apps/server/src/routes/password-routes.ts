@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { PasswordController } from "../controllers/password.controller";
+import { PasswordController } from "../controllers/password-controller";
 import { AuthMiddleware } from "../middlewares/auth.middleware";
 
 export class PasswordRoutes {

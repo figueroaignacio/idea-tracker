@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Password } from "./password.entity";
+import { Password } from "./password-entity";
 
 @Entity()
 export class User {

@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../config/database";
-import { Password } from "../models/password.entity";
-import { User } from "../models/user.entity";
+import { Password } from "../models/password-entity";
+import { User } from "../models/user-entity";
 
 export class PasswordRepository {
   private passwordRepository: Repository<Password>;

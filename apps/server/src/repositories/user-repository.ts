@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../config/database";
 import { CreateUserDTO } from "../dtos/user-dto";
-import { User } from "../models/user.entity";
+import { User } from "../models/user-entity";
 
 export class UserRepository {
   private userRepository: Repository<User>;

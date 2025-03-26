@@ -6,9 +6,9 @@ import passport from "passport";
 import { AppDataSource } from "./config/database";
 import { PassportConfig } from "./config/passport";
 import { UserRepository } from "./repositories/user-repository";
-import { AuthRoutes } from "./routes/auth.routes";
-import { PasswordRoutes } from "./routes/password.routes";
-import { UsersService } from "./services/users.service";
+import { AuthRoutes } from "./routes/auth-routes";
+import { PasswordRoutes } from "./routes/password-routes";
+import { UsersService } from "./services/users-service";
 
 export class App {
   private app: express.Application;

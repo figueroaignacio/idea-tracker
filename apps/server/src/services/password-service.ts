@@ -2,9 +2,9 @@ import * as crypto from "crypto";
 import { Repository } from "typeorm";
 import { AppDataSource } from "../config/database";
 import { PasswordCreateDTO, PasswordUpdateDTO } from "../dtos/password-dto";
-import { Password } from "../models/password.entity";
-import { User } from "../models/user.entity";
-import { PasswordRepository } from "../repositories/password.repository";
+import { Password } from "../models/password-entity";
+import { User } from "../models/user-entity";
+import { PasswordRepository } from "../repositories/password-repository";
 import { decrypt, encrypt } from "../utils/crypto-utils";
 
 export class PasswordService {
