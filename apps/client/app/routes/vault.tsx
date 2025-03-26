@@ -5,6 +5,7 @@ import { useAuth } from "~/modules/auth/context/auth-context";
 // Components
 import { Check, Clipboard, Eye, EyeOff, Trash2 } from "lucide-react";
 import { PageHeader } from "~/components/page-header";
+import { VaultActions } from "~/modules/vault/components/vault-actions";
 import { VaultSecurityTips } from "~/modules/vault/components/vault-security-tips";
 
 // Api
@@ -71,20 +72,17 @@ export default function Vault() {
 
         if (!response.ok) throw new Error("Error al eliminar la contraseña");
 
-        // Remove the deleted password from the state
         setPasswords((prevPasswords) =>
           prevPasswords.filter((password) => password.id !== id)
         );
 
-        // Show success message
-        setSuccessMessage("Contraseña eliminada correctamente.");
+        setSuccessMessage("Password successfully deleted.");
 
-        // Hide success message after 3 seconds
         setTimeout(() => {
           setSuccessMessage(null);
         }, 3000);
       } catch (error) {
-        setError("No se pudo eliminar la contraseña");
+        setError("The password could not be removed.");
       }
     }
   }
@@ -149,6 +147,7 @@ export default function Vault() {
           </div>
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border dark:border-border shadow-sm">
+            <VaultActions />
             <table className="min-w-full divide-y divide-border dark:divide-border">
               <thead className="bg-card">
                 <tr>

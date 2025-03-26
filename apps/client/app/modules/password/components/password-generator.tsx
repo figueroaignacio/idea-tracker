@@ -11,8 +11,10 @@ import { StatusMessage } from "./status-message";
 
 // Utils
 import z from "zod";
-import { generatePassword } from "../api/password";
 import { passwordSchema } from "../lib/schemas";
+
+// Api
+import { generatePassword } from "../api/password";
 
 export function PasswordGenerator() {
   const { user } = useAuth();
