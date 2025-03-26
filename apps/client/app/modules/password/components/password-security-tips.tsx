@@ -2,14 +2,12 @@ import { InfoIcon } from "lucide-react";
 
 export function PasswordSecurityTips() {
   return (
-    <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-100 dark:border-blue-800">
+    <div className="mt-6 rounded-lg p-4 bg-secondary/30">
       <div className="flex">
-        <InfoIcon className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
+        <InfoIcon className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
         <div>
-          <h4 className="text-sm font-medium text-blue-800 dark:text-blue-300">
-            Security Tips
-          </h4>
-          <ul className="mt-1 text-xs text-blue-700 dark:text-blue-400 space-y-1 list-disc list-inside">
+          <h4 className="text-sm font-medium ">Security Tips</h4>
+          <ul className="mt-1 text-xs space-y-1 list-disc list-inside">
             <li>Use unique passwords for each service</li>
             <li>Combine letters, numbers, and symbols</li>
             <li>Use at least 12 characters in your passwords</li>
