@@ -19,6 +19,13 @@ import { type PasswordEntry } from "~/modules/vault/lib/definitions";
 // Api
 import { API } from "~/lib/api";
 
+export function meta() {
+  return [
+    { title: "Aegis - Vault" },
+    { name: "description", content: "Manage your passwords." },
+  ];
+}
+
 export default function Vault() {
   const { user, loading } = useAuth();
   const [passwords, setPasswords] = useState<PasswordEntry[]>([]);

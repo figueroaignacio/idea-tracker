@@ -5,7 +5,7 @@ import { useAuth } from "~/modules/auth/context/auth-context";
 export function meta() {
   return [
     { title: "Aegis - Dashboard" },
-    { name: "description", content: "Your Aegis dashboard" },
+    { name: "description", content: "Aegis Dashboard" },
   ];
 }
 
