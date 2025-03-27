@@ -1,6 +1,5 @@
 export interface PasswordCreateDTO {
-  provider: string;
-  title: string;
+  platform: string;
   username: string;
   password: string;
   website?: string;

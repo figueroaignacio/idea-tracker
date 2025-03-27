@@ -49,7 +49,7 @@ export function PasswordGenerator() {
         credentials: "include",
         body: JSON.stringify({
           ...formData,
-          title: formData.provider,
+          platform: formData.platform,
           website: "",
           notes: "",
         }),

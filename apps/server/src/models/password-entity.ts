@@ -14,7 +14,7 @@ export class Password {
   id: number;
 
   @Column()
-  title: string;
+  platform: string;
 
   @Column()
   username: string;
@@ -24,9 +24,6 @@ export class Password {
 
   @Column({ nullable: true })
   website: string;
-
-  @Column()
-  provider: string;
 
   @Column({ nullable: true })
   notes: string;

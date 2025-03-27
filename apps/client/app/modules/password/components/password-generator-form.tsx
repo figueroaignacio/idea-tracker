@@ -46,27 +46,27 @@ export function PasswordGeneratorForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div>
         <label
-          htmlFor="provider"
+          htmlFor="platform"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
-          Provider
+          Platform
         </label>
         <div className="relative rounded-md shadow-sm">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <KeyIcon className="h-5 w-5 text-gray-400" />
           </div>
           <input
-            id="provider"
+            id="platform"
             type="text"
             placeholder="Facebook, Google, Twitter..."
-            {...register("provider")}
+            {...register("platform")}
             className="pl-10 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-colors duration-200"
           />
         </div>
-        {errors.provider && (
+        {errors.platform && (
           <p className="mt-1 text-sm text-red-500 dark:text-red-400 flex items-center">
             <AlertCircleIcon className="h-4 w-4 mr-1" />
-            {errors.provider.message}
+            {errors.platform.message}
           </p>
         )}
       </div>

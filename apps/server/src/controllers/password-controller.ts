@@ -63,16 +63,15 @@ export class PasswordController {
 
       const userId = (req.user as any).id;
 
-      const { title, username, password, website, notes, provider } = req.body;
+      const { username, password, website, notes, platform } = req.body;
 
       const newPassword = await this.passwordService.createPassword({
-        title,
         username,
         password,
         website,
         notes,
         userId,
-        provider,
+        platform,
       });
 
       res.status(201).json(newPassword);

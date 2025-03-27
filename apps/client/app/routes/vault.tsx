@@ -16,7 +16,7 @@ interface PasswordEntry {
   title: string;
   username: string;
   password: string;
-  provider: string;
+  platform: string;
 }
 
 export default function Vault() {
@@ -152,10 +152,10 @@ export default function Vault() {
               <thead className="bg-card">
                 <tr>
                   <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Title
+                    Platform
                   </th>
                   <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Notes
+                    Username
                   </th>
                   <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Password
@@ -169,7 +169,7 @@ export default function Vault() {
                 {passwords.map((entry, index) => (
                   <tr key={entry.id} className={`hover:bg-primary`}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground dark:text-foreground">
-                      {entry.title}
+                      {entry.platform}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex items-center space-x-2">
