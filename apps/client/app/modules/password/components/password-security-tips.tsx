@@ -2,7 +2,7 @@ import { InfoIcon } from "lucide-react";
 
 export function PasswordSecurityTips() {
   return (
-    <div className="mt-6 rounded-lg p-4 bg-secondary/30">
+    <div className="mt-6 rounded-lg p-4 bg-secondary/30 max-w-2xl mx-auto">
       <div className="flex">
         <InfoIcon className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
         <div>

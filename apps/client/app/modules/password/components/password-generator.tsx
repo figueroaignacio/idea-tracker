@@ -82,19 +82,21 @@ export function PasswordGenerator() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-card rounded-xl shadow-lg overflow-hidden md:max-w-2xl border border-gray-200 dark:border-gray-700">
-      <PasswordGeneratorHeader />
-      <div className="p-6">
-        <StatusMessage error={error} success={success} />
-        <PasswordGeneratorForm
-          onSubmit={handleSubmit}
-          isSubmitting={isSubmitting}
-          password={password}
-          generatePassword={handlePasswordGeneration}
-        />
-        <PasswordSecurityTips />
-        <AuthenticationStatus />
+    <>
+      <div className="max-w-md mx-auto bg-card rounded-xl shadow-lg overflow-hidden md:max-w-2xl border border-gray-200 dark:border-gray-700">
+        <PasswordGeneratorHeader />
+        <div className="p-6">
+          <StatusMessage error={error} success={success} />
+          <PasswordGeneratorForm
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+            password={password}
+            generatePassword={handlePasswordGeneration}
+          />
+          <AuthenticationStatus />
+        </div>
       </div>
-    </div>
+      <PasswordSecurityTips />
+    </>
   );
 }
