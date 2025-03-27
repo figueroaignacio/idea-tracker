@@ -1,5 +1,5 @@
 // Components
-import { Check, Clipboard, Eye, EyeOff, Trash2 } from "lucide-react";
+import { Check, Clipboard, Trash2 } from "lucide-react";
 
 // Definitions
 import { type PasswordEntry } from "~/modules/vault/lib/definitions";
@@ -28,21 +28,15 @@ export function VaultTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
         <div className="flex items-center space-x-2">
-          <span className="truncate max-w-[150px]">{entry.website}</span>
-          <button
-            onClick={() =>
-              onCopyToClipboard(entry.website, entry.id, "website")
-            }
-            className="p-1 rounded-md hover:bg-muted-secondary transition-colors"
-            title="Copy website"
-          >
-            {copiedField?.id === entry.id &&
-            copiedField?.field === "website" ? (
-              <Check className="w-4 h-4 text-primary" />
-            ) : (
-              <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground" />
-            )}
-          </button>
+          <span className="truncate max-w-[150px]">
+            <a
+              href={entry.website}
+              target="_blank"
+              className="underline hover:text-secondary"
+            >
+              Click to go
+            </a>
+          </span>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
@@ -71,14 +65,17 @@ export function VaultTableRow({
           </span>
           <div className="flex space-x-1">
             <button
-              onClick={() => onToggleVisibility(entry.id)}
-              className="p-1 rounded-md transition-colors"
-              title={isVisible ? "Ocultar contraseña" : "Mostrar contraseña"}
+              onClick={() =>
+                onCopyToClipboard(entry.password, entry.id, "password")
+              }
+              className="p-1 rounded-md hover:bg-muted-secondary dark:hover:bg-muted-secondary transition-colors"
+              title="Copy password"
             >
-              {isVisible ? (
-                <EyeOff className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
+              {copiedField?.id === entry.id &&
+              copiedField?.field === "password" ? (
+                <Check className="w-4 h-4 text-primary" />
               ) : (
-                <Eye className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
+                <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
               )}
             </button>
             {isVisible && (
