@@ -1,25 +1,23 @@
+"use client";
+
 // Hooks
 import { useEffect, useState } from "react";
 import { useAuth } from "~/modules/auth/context/auth-context";
 
 // Components
-import { Check, Clipboard, Eye, EyeOff, Trash2 } from "lucide-react";
 import { PageHeader } from "~/components/page-header";
-import { VaultActions } from "~/modules/vault/components/vault-actions";
+import { EmptyState } from "~/modules/vault/components/empty-state";
+import { LoadingState } from "~/modules/vault/components/loading-state";
+import { StatusMessage } from "~/modules/vault/components/status-message";
+import { UnauthorizedState } from "~/modules/vault/components/unauthorized-state";
+import { VaultTable } from "~/modules/vault/components/vaul-table";
 import { VaultSecurityTips } from "~/modules/vault/components/vault-security-tips";
+
+// Types
+import { type PasswordEntry } from "~/modules/vault/lib/definitions";
 
 // Api
 import { API } from "~/lib/api";
-
-interface PasswordEntry {
-  id: number;
-  title: string;
-  username: string;
-  password: string;
-  platform: string;
-  notes: string;
-  website: string;
-}
 
 export default function Vault() {
   const { user, loading } = useAuth();
@@ -103,191 +101,30 @@ export default function Vault() {
   };
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="h-8 w-64 bg-muted-secondary rounded mb-4"></div>
-          <div className="h-64 w-full max-w-3xl bg-muted-secondary dark:bg-muted-secondary rounded"></div>
-        </div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (!user) {
-    return (
-      <div className="p-6 max-w-4xl mx-auto text-center">
-        <div className="bg-secondary dark:bg-secondary border-border border rounded-lg p-4">
-          <p className="text-foreground dark:text-foreground">
-            Unauthorized. Sign in to see your passwords.{" "}
-          </p>
-        </div>
-      </div>
-    );
+    return <UnauthorizedState />;
   }
 
   return (
     <>
       <PageHeader title="Password Vault" />
       <div className="max-w-5xl mx-auto page-container">
-        {error && (
-          <div className="mb-6 bg-destructive/10 dark:bg-destructive/20 border-destructive/20 border rounded-lg p-4">
-            <p className="text-destructive dark:text-destructive">{error}</p>
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="mb-6 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 border border-green-400 dark:border-green-500 rounded-lg p-4">
-            <p>{successMessage}</p>
-          </div>
-        )}
+        <StatusMessage error={error} successMessage={successMessage} />
 
         {passwords.length === 0 && !error ? (
-          <div className="bg-card dark:bg-card border-border border rounded-lg p-8 text-center">
-            <p className="text-muted-foreground dark:text-muted-foreground">
-              There are no saved passwords.
-            </p>
-          </div>
+          <EmptyState />
         ) : (
-          <div className="overflow-x-auto rounded-lg border border-border dark:border-border shadow-sm">
-            <VaultActions />
-            <table className="min-w-full divide-y divide-border dark:divide-border">
-              <thead className="bg-card">
-                <tr>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Platform
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Website
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Username
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Password
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Note
-                  </th>
-                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-background divide-y divide-border dark:divide-border">
-                {passwords.map((entry) => (
-                  <tr key={entry.id} className={`hover:bg-primary`}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground dark:text-foreground">
-                      {entry.platform}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <span className="truncate max-w-[150px]">
-                          {entry.website}
-                        </span>
-                        <button
-                          onClick={() =>
-                            copyToClipboard(entry.website, entry.id, "website")
-                          }
-                          className="p-1 rounded-md hover:bg-muted-secondary transition-colors"
-                          title="Copy website"
-                        >
-                          {copiedField?.id === entry.id &&
-                          copiedField?.field === "website" ? (
-                            <Check className="w-4 h-4 text-primary" />
-                          ) : (
-                            <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground" />
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <span className="truncate max-w-[150px]">
-                          {entry.username}
-                        </span>
-                        <button
-                          onClick={() =>
-                            copyToClipboard(
-                              entry.username,
-                              entry.id,
-                              "username"
-                            )
-                          }
-                          className="p-1 rounded-md hover:bg-muted-secondary transition-colors"
-                          title="Copy username"
-                        >
-                          {copiedField?.id === entry.id &&
-                          copiedField?.field === "username" ? (
-                            <Check className="w-4 h-4 text-primary" />
-                          ) : (
-                            <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground" />
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-mono text-xs">
-                          {visiblePasswords[entry.id]
-                            ? entry.password
-                            : "••••••••"}
-                        </span>
-                        <div className="flex space-x-1">
-                          <button
-                            onClick={() => togglePasswordVisibility(entry.id)}
-                            className="p-1 rounded-md transition-colors"
-                            title={
-                              visiblePasswords[entry.id]
-                                ? "Ocultar contraseña"
-                                : "Mostrar contraseña"
-                            }
-                          >
-                            {visiblePasswords[entry.id] ? (
-                              <EyeOff className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
-                            ) : (
-                              <Eye className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
-                            )}
-                          </button>
-                          {visiblePasswords[entry.id] && (
-                            <button
-                              onClick={() =>
-                                copyToClipboard(
-                                  entry.password,
-                                  entry.id,
-                                  "password"
-                                )
-                              }
-                              className="p-1 rounded-md hover:bg-muted-secondary dark:hover:bg-muted-secondary transition-colors"
-                              title="Copy password"
-                            >
-                              {copiedField?.id === entry.id &&
-                              copiedField?.field === "password" ? (
-                                <Check className="w-4 h-4 text-primary" />
-                              ) : (
-                                <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground" />
-                              )}
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      {entry.notes}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <button
-                        onClick={() => deletePassword(entry.id)}
-                        className="p-1 rounded-md text-destructive hover:bg-destructive/10 transition-colors"
-                        title="Delete password"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <VaultTable
+            passwords={passwords}
+            visiblePasswords={visiblePasswords}
+            copiedField={copiedField}
+            onToggleVisibility={togglePasswordVisibility}
+            onCopyToClipboard={copyToClipboard}
+            onDeletePassword={deletePassword}
+          />
         )}
         <VaultSecurityTips />
       </div>
