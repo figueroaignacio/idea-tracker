@@ -64,7 +64,7 @@ export class PasswordService {
     return await this.passwordRepository.delete(id, userId);
   }
 
-  async generateRandomPassword(length = 16): Promise<string> {
+  async generateRandomPassword(length = 24): Promise<string> {
     const charset =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
     let password = "";
