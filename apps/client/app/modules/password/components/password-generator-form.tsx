@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 
 // Components
 import { AlertCircle, Edit, Globe, Key, Lock, User } from "lucide-react";
+import { Button } from "~/components/ui/button";
 
 // Utils
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -190,14 +191,14 @@ export function PasswordGeneratorForm({
             aria-invalid={errors.password ? "true" : "false"}
           />
           <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <button
+            <Button
               type="button"
               onClick={generatePassword}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               aria-label="Generate password"
+              variant="outline"
             >
               Generate
-            </button>
+            </Button>
           </div>
         </div>
         {errors.password && (
@@ -212,11 +213,12 @@ export function PasswordGeneratorForm({
       </div>
 
       <div className="pt-2">
-        <button
+        <Button
           type="submit"
+          variant="primary"
           disabled={isSubmitting || !password}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-indigo-600"
           aria-disabled={isSubmitting || !password}
+          className="w-full"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center">
@@ -245,7 +247,7 @@ export function PasswordGeneratorForm({
           ) : (
             "Save Password"
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

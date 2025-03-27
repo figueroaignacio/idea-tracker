@@ -1,3 +1,5 @@
+import { AlertCircleIcon } from "lucide-react";
+
 interface StatusMessageProps {
   error: string | null;
   successMessage: string | null;
@@ -9,14 +11,15 @@ export function StatusMessage({ error, successMessage }: StatusMessageProps) {
   return (
     <>
       {error && (
-        <div className="mb-6 bg-destructive/10 dark:bg-destructive/20 border-destructive/20 border rounded-lg p-4">
-          <p className="text-destructive dark:text-destructive">{error}</p>
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 rounded-lg flex items-center shadow-sm animate-fadeIn">
+          <AlertCircleIcon className="h-5 w-5 mr-2 flex-shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
       {successMessage && (
-        <div className="mb-6 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100 border border-green-400 dark:border-green-500 rounded-lg p-4">
-          <p>{successMessage}</p>
+        <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 rounded-lg flex justify-between items-center shadow-sm animate-fadeIn">
+          {successMessage}
         </div>
       )}
     </>
