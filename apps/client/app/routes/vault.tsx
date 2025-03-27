@@ -10,8 +10,8 @@ import { EmptyState } from "~/modules/vault/components/empty-state";
 import { LoadingState } from "~/modules/vault/components/loading-state";
 import { StatusMessage } from "~/modules/vault/components/status-message";
 import { UnauthorizedState } from "~/modules/vault/components/unauthorized-state";
-import { VaultTable } from "~/modules/vault/components/vaul-table";
 import { VaultSecurityTips } from "~/modules/vault/components/vault-security-tips";
+import { VaultTable } from "~/modules/vault/components/vault-table";
 
 // Types
 import { type PasswordEntry } from "~/modules/vault/lib/definitions";
