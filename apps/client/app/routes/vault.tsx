@@ -17,6 +17,8 @@ interface PasswordEntry {
   username: string;
   password: string;
   platform: string;
+  notes: string;
+  website: string;
 }
 
 export default function Vault() {
@@ -155,10 +157,16 @@ export default function Vault() {
                     Platform
                   </th>
                   <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
+                    Website
+                  </th>
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Username
                   </th>
                   <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Password
+                  </th>
+                  <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
+                    Note
                   </th>
                   <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
                     Actions
@@ -166,10 +174,31 @@ export default function Vault() {
                 </tr>
               </thead>
               <tbody className="bg-background divide-y divide-border dark:divide-border">
-                {passwords.map((entry, index) => (
+                {passwords.map((entry) => (
                   <tr key={entry.id} className={`hover:bg-primary`}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground dark:text-foreground">
                       {entry.platform}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                      <div className="flex items-center space-x-2">
+                        <span className="truncate max-w-[150px]">
+                          {entry.website}
+                        </span>
+                        <button
+                          onClick={() =>
+                            copyToClipboard(entry.website, entry.id, "website")
+                          }
+                          className="p-1 rounded-md hover:bg-muted-secondary transition-colors"
+                          title="Copy website"
+                        >
+                          {copiedField?.id === entry.id &&
+                          copiedField?.field === "website" ? (
+                            <Check className="w-4 h-4 text-primary" />
+                          ) : (
+                            <Clipboard className="w-4 h-4 text-muted-foreground hover:text-foreground dark:text-muted-foreground" />
+                          )}
+                        </button>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex items-center space-x-2">
@@ -185,7 +214,7 @@ export default function Vault() {
                             )
                           }
                           className="p-1 rounded-md hover:bg-muted-secondary transition-colors"
-                          title="Copiar usuario"
+                          title="Copy username"
                         >
                           {copiedField?.id === entry.id &&
                           copiedField?.field === "username" ? (
@@ -206,7 +235,7 @@ export default function Vault() {
                         <div className="flex space-x-1">
                           <button
                             onClick={() => togglePasswordVisibility(entry.id)}
-                            className="p-1 rounded-md  transition-colors"
+                            className="p-1 rounded-md transition-colors"
                             title={
                               visiblePasswords[entry.id]
                                 ? "Ocultar contraseña"
@@ -229,7 +258,7 @@ export default function Vault() {
                                 )
                               }
                               className="p-1 rounded-md hover:bg-muted-secondary dark:hover:bg-muted-secondary transition-colors"
-                              title="Copiar contraseña"
+                              title="Copy password"
                             >
                               {copiedField?.id === entry.id &&
                               copiedField?.field === "password" ? (
@@ -243,12 +272,15 @@ export default function Vault() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                      {entry.notes}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <button
                         onClick={() => deletePassword(entry.id)}
-                        className=""
+                        className="p-1 rounded-md text-destructive hover:bg-destructive/10 transition-colors"
                         title="Delete password"
                       >
-                        <Trash2 className="w-4 h-4 hover:text-destructive cursor-pointer" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>

@@ -49,9 +49,6 @@ export function PasswordGenerator() {
         credentials: "include",
         body: JSON.stringify({
           ...formData,
-          platform: formData.platform,
-          website: "",
-          notes: "",
         }),
       });
 

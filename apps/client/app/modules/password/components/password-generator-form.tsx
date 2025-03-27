@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 // Components
-import { AlertCircle, Key, Lock, User } from "lucide-react";
+import { AlertCircle, Edit, Globe, Key, Lock, User } from "lucide-react";
 
 // Utils
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -104,6 +104,68 @@ export function PasswordGeneratorForm({
           >
             <AlertCircle className="h-4 w-4 mr-1.5 flex-shrink-0" />
             <span>{errors.username.message}</span>
+          </p>
+        )}
+      </div>
+
+      <div className="form-group">
+        <label
+          htmlFor="website"
+          className="block text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2"
+        >
+          Website
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Globe className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+          </div>
+          <input
+            id="website"
+            type="url"
+            placeholder="https://www.example.com"
+            {...register("website")}
+            className="pl-10 w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-200"
+            aria-invalid={errors.website ? "true" : "false"}
+          />
+        </div>
+        {errors.website && (
+          <p
+            className="mt-1.5 text-sm text-red-600 dark:text-red-500 flex items-center"
+            role="alert"
+          >
+            <AlertCircle className="h-4 w-4 mr-1.5 flex-shrink-0" />
+            <span>{errors.website.message}</span>
+          </p>
+        )}
+      </div>
+
+      <div className="form-group">
+        <label
+          htmlFor="note"
+          className="block text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2"
+        >
+          Note
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex top-4 pointer-events-none">
+            <Edit className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+          </div>
+          <textarea
+            id="note"
+            placeholder="Any additional notes"
+            {...register("notes")}
+            className="pl-10 w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-200"
+            rows={4}
+            aria-invalid={errors.notes ? "true" : "false"}
+          />
+        </div>
+        {errors.notes && (
+          <p
+            className="mt-1.5 text-sm text-red-600 dark:text-red-500 flex items-center"
+            role="alert"
+          >
+            <AlertCircle className="h-4 w-4 mr-1.5 flex-shrink-0" />
+            <span>{errors.notes.message}</span>
           </p>
         )}
       </div>
