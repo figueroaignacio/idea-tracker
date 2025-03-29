@@ -1,23 +1,22 @@
-"use client";
-
-// Hooks
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
+import { PageHeader } from "~/components/page-header";
+import { buttonVarians } from "~/components/ui/button";
 import { useAuth } from "~/hooks/use-auth";
 
-// Components
-import { PageHeader } from "~/components/page-header";
-import { EmptyState } from "~/modules/vault/components/empty-state";
-import { LoadingState } from "~/modules/vault/components/loading-state";
-import { StatusMessage } from "~/modules/vault/components/status-message";
-import { UnauthorizedState } from "~/modules/vault/components/unauthorized-state";
-import { VaultSecurityTips } from "~/modules/vault/components/vault-security-tips";
-import { VaultTable } from "~/modules/vault/components/vault-table";
+type Field = {
+  id: number;
+  name: string;
+  type: string;
+};
 
-// Types
-import { type PasswordEntry } from "~/modules/vault/lib/definitions";
-
-// Api
-import { API } from "~/lib/api";
+type VaultData = {
+  id: number;
+  name: string;
+  fields: Field[];
+  records: any[];
+};
 
 export function meta() {
   return [
@@ -27,114 +26,93 @@ export function meta() {
 }
 
 export default function Vault() {
-  const { user, loading } = useAuth();
-  const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [visiblePasswords, setVisiblePasswords] = useState<{
-    [key: number]: boolean;
-  }>({});
-  const [copiedField, setCopiedField] = useState<{
-    id: number;
-    field: string;
-  } | null>(null);
+  const [vaults, setVaults] = useState<VaultData[]>([]);
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (!user) return;
-
-    async function getPasswords() {
+    const fetchVaults = async () => {
       try {
-        const response = await fetch(`${API}/passwords`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) throw new Error("Error al obtener los datos");
-
-        const data = await response.json();
-        setPasswords(data);
-      } catch (err) {
-        setError("No se pudieron cargar las contraseñas");
-      }
-    }
-
-    getPasswords();
-  }, [user]);
-
-  async function deletePassword(id: number) {
-    if (
-      window.confirm("¿Estás seguro de que deseas eliminar esta contraseña?")
-    ) {
-      try {
-        const response = await fetch(`${API}/passwords/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) throw new Error("Error al eliminar la contraseña");
-
-        setPasswords((prevPasswords) =>
-          prevPasswords.filter((password) => password.id !== id)
+        const response = await fetch(
+          `http://localhost:3000/api/vaults/${user?.id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
         );
-
-        setSuccessMessage("Password successfully deleted.");
-
-        setTimeout(() => {
-          setSuccessMessage(null);
-        }, 3000);
+        const data = await response.json();
+        setVaults(data);
       } catch (error) {
-        setError("The password could not be removed.");
+        console.error("Error al obtener los vaults:", error);
       }
-    }
-  }
+    };
 
-  const togglePasswordVisibility = (id: number) => {
-    setVisiblePasswords((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const copyToClipboard = (text: string, id: number, field: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedField({ id, field });
-
-    setTimeout(() => {
-      setCopiedField(null);
-    }, 2000);
-  };
-
-  if (loading) {
-    return <LoadingState />;
-  }
-
-  if (!user) {
-    return <UnauthorizedState />;
-  }
+    fetchVaults();
+  }, [user]);
 
   return (
     <>
       <PageHeader title="Password Vault" />
-      <div className="max-w-5xl mx-auto page-container">
-        <StatusMessage error={error} successMessage={successMessage} />
+      <section className="page-container">
+        <div>
+          <Link
+            to="/vault/create-vault"
+            className={`${buttonVarians({
+              variant: "primary",
+              size: "md",
+            })} space-x-3`}
+          >
+            <span>Create Vault</span>
+            <Plus size={16} />
+          </Link>
+        </div>
 
-        {passwords.length === 0 && !error ? (
-          <EmptyState />
-        ) : (
-          <VaultTable
-            passwords={passwords}
-            visiblePasswords={visiblePasswords}
-            copiedField={copiedField}
-            onToggleVisibility={togglePasswordVisibility}
-            onCopyToClipboard={copyToClipboard}
-            onDeletePassword={deletePassword}
-          />
-        )}
-        <VaultSecurityTips />
-      </div>
+        <div className="mt-8">
+          {vaults.map((vault) => (
+            <div key={vault.id} className="mb-8">
+              <h3 className="text-lg font-semibold mb-4">{vault.name}</h3>
+              <div className="overflow-x-auto rounded-lg border border-border dark:border-border shadow-sm">
+                <table className="min-w-full divide-y divide-border dark:divide-border">
+                  <thead className="bg-card">
+                    <tr>
+                      <th className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider">
+                        Vault ID
+                      </th>
+                      {vault.fields.map((field) => (
+                        <th
+                          key={field.id}
+                          className="px-6 py-3.5 text-left text-xs font-medium text-muted-foreground dark:text-muted-foreground uppercase tracking-wider"
+                        >
+                          {field.name}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="bg-background divide-y divide-border dark:divide-border">
+                    {vault.records.map((record, index) => (
+                      <tr key={index} className="hover:bg-primary">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground dark:text-foreground">
+                          {vault.id}
+                        </td>
+                        {vault.fields.map((field) => (
+                          <td
+                            key={field.id}
+                            className="px-6 py-4 whitespace-nowrap text-sm text-foreground"
+                          >
+                            {record[field.name] || "N/A"}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

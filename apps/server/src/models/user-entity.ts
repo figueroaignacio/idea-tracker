@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Password } from "./password-entity";
+import { Vault } from "./vault-entity";
 
 @Entity()
 export class User {
@@ -37,6 +37,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Password, (password) => password.user)
-  passwords: Password[];
+  @OneToMany(() => Vault, (vault) => vault.user, { cascade: true })
+  vaults: Vault[];
+  passwords: any;
 }

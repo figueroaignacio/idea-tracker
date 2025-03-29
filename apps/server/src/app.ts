@@ -8,6 +8,7 @@ import { PassportConfig } from "./config/passport";
 import { UserRepository } from "./repositories/user-repository";
 import { AuthRoutes } from "./routes/auth-routes";
 import { PasswordRoutes } from "./routes/password-routes";
+import { VaultRoutes } from "./routes/vault-routes";
 import { UsersService } from "./services/users-service";
 
 export class App {
@@ -69,15 +70,17 @@ export class App {
   private initializeRoutes(): void {
     const authRoutes = new AuthRoutes();
     const passwordRoutes = new PasswordRoutes();
+    const vaultRoutes = new VaultRoutes();
 
     this.app.use("/api/auth", authRoutes.getRouter());
     this.app.use("/api/passwords", passwordRoutes.getRouter());
+    this.app.use("/api/vaults", vaultRoutes.getRouter());
 
     this.app.use("/api/*", (req, res) => {
       if (!req.isAuthenticated()) {
         return res.redirect("/api/auth/providers");
       }
-      res.status(404).json({ message: "Ruta no encontrada" });
+      res.status(404).json({ message: "Route Not Found" });
     });
 
     this.app.get("/", (req, res) => {
