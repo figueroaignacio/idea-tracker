@@ -1,7 +1,7 @@
 "use client";
 
 // Hooks
-import { useAuth } from "~/modules/auth/context/auth-context";
+import { useAuth } from "~/hooks/use-auth";
 
 // Components
 import { EllipsisVertical, LogOut } from "lucide-react";

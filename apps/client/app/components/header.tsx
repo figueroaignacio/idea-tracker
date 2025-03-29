@@ -1,9 +1,14 @@
+// Hooks
+import { useAuth } from "~/hooks/use-auth";
+import { useIsMobile } from "~/hooks/use-mobile";
+
+// Components
 import { Shield } from "lucide-react";
 import { Link } from "react-router";
-import { useIsMobile } from "~/hooks/use-mobile";
-import { useAuth } from "~/modules/auth/context/auth-context";
 import { BackgroundPattern } from "./background-pattern";
 import { MobileMenu } from "./mobile-menu";
+
+// Utils
 import { buttonVarians } from "./ui/button";
 
 export function Header() {

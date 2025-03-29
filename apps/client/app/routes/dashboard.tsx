@@ -1,6 +1,9 @@
+// Hooks
+import { useAuth } from "~/hooks/use-auth";
+
+// Components
 import { PageHeader } from "~/components/page-header";
 import { Button } from "~/components/ui/button";
-import { useAuth } from "~/modules/auth/context/auth-context";
 
 export function meta() {
   return [

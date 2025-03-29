@@ -1,6 +1,6 @@
 // Hooks
 import { useState } from "react";
-import { useAuth } from "../context/auth-context";
+import { useAuth } from "~/hooks/use-auth";
 
 // Components
 import { Button } from "~/components/ui/button";

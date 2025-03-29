@@ -1,22 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { AuthContext } from "~/context/auth-context";
 import { type User } from "~/modules/user/lib/definitions";
 import {
   fetchUser,
   loginWithGitHub,
   loginWithGoogle,
   logout,
-} from "../api/auth";
-
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  loginWithGitHub: () => void;
-  loginWithGoogle: () => void;
-  logout: () => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+} from "../modules/auth/api/auth";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -41,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider
+    <AuthContext
       value={{
         user,
         loading,
@@ -51,14 +42,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-    </AuthContext.Provider>
+    </AuthContext>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used inside of an AuthProvider");
-  }
-  return context;
 };

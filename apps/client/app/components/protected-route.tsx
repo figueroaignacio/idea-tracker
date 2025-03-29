@@ -1,7 +1,9 @@
+// Hooks
+import { useAuth } from "~/hooks/use-auth";
+
 // Components
 import { LoaderCircle } from "lucide-react";
 import { Navigate } from "react-router";
-import { useAuth } from "~/modules/auth/context/auth-context";
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();

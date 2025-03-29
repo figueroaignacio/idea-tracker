@@ -2,7 +2,7 @@
 
 // Hooks
 import { useEffect, useState } from "react";
-import { useAuth } from "~/modules/auth/context/auth-context";
+import { useAuth } from "~/hooks/use-auth";
 
 // Components
 import { PageHeader } from "~/components/page-header";

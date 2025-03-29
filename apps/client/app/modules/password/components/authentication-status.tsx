@@ -1,5 +1,7 @@
-import { useAuth } from "~/modules/auth/context/auth-context";
+// Hooks
+import { useAuth } from "~/hooks/use-auth";
 
+// Components
 import { AlertCircleIcon, CheckCircleIcon } from "lucide-react";
 
 export function AuthenticationStatus() {
