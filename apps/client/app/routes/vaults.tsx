@@ -1,10 +1,9 @@
-// Components
 import { PageHeader } from "~/components/page-header";
 
-export default function CreateVault() {
+export default function Vault() {
   return (
     <>
-      <PageHeader title="Create New Vault" />
+      <PageHeader title="Vaults" />
       <section className="page-container"></section>
     </>
   );

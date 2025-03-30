@@ -1,10 +1,6 @@
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
-import { Password } from "../models/password-entity";
 import { User } from "../models/user-entity";
-import { Vault } from "../models/vault-entity";
-import { VaultField } from "../models/vault-field-entity";
-import { VaultRecord } from "../models/vault-record-entity";
 
 dotenv.config();
 
@@ -16,7 +12,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: process.env.NODE_ENV !== "production",
   logging: process.env.NODE_ENV !== "production",
-  entities: [User, Password, Vault, VaultField, VaultRecord],
+  entities: [User],
   subscribers: [],
   migrations: ["src/migrations/*.ts"],
 });

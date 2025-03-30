@@ -2,11 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Vault } from "./vault-entity";
 
 @Entity()
 export class User {
@@ -36,8 +34,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => Vault, (vault) => vault.user, { cascade: true })
-  vaults: Vault[];
-  passwords: any;
 }

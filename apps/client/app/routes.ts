@@ -16,9 +16,9 @@ export default [
     ]),
     layout("./layout/dashboard-layout.tsx", [
       route("/dashboard", "./routes/dashboard.tsx"),
-      route("/generator", "./routes/generator.tsx"),
       ...prefix("/vault", [
-        index("./routes/vault.tsx"),
+        index("./routes/vaults.tsx"),
+        route("/:id", "./routes/vault-details.tsx"),
         route("/create-vault", "./routes/create-vault.tsx"),
       ]),
       route("/settings", "./routes/settings.tsx"),

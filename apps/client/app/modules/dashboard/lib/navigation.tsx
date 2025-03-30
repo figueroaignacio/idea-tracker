@@ -1,9 +1,4 @@
-import {
-  LayoutDashboard,
-  Settings2,
-  SquareAsterisk,
-  VaultIcon,
-} from "lucide-react";
+import { LayoutDashboard, Settings2, VaultIcon } from "lucide-react";
 
 export const sidebarLinks = [
   {
@@ -12,12 +7,7 @@ export const sidebarLinks = [
     icon: <LayoutDashboard />,
   },
   {
-    label: "Password Generator",
-    to: "/generator",
-    icon: <SquareAsterisk />,
-  },
-  {
-    label: "Vault",
+    label: "Vaults",
     to: "/vault",
     icon: <VaultIcon />,
   },
