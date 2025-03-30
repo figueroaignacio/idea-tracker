@@ -5,7 +5,7 @@ import helmet from "helmet";
 import passport from "passport";
 import { AppDataSource } from "./config/database";
 import { PassportConfig } from "./config/passport";
-import { UserRepository } from "./repositories/user-repository";
+import { User } from "./entities/user-entity"; // Asegúrate de importar User
 import { AuthRoutes } from "./routes/auth-routes";
 import { UsersService } from "./services/users-service";
 
@@ -59,9 +59,10 @@ export class App {
     }
   }
 
-  private initializePassport(): void {
-    const userRepository = new UserRepository();
+  private async initializePassport(): Promise<void> {
+    const userRepository = AppDataSource.getRepository(User);
     const userService = new UsersService(userRepository);
+
     new PassportConfig(userService);
   }
 

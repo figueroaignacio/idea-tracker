@@ -1,26 +1,34 @@
+import { Repository } from "typeorm";
 import { CreateUserDTO } from "../dtos/user-dto";
-import { User } from "../models/user-entity";
-import { UserRepository } from "../repositories/user-repository";
+import { User } from "../entities/user-entity";
 
 export class UsersService {
-  private userRepository: UserRepository;
+  private userRepository: Repository<User>;
 
-  constructor(userRepository: UserRepository) {
+  constructor(userRepository: Repository<User>) {
     this.userRepository = userRepository;
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    return await this.userRepository.findUserById(id);
+  async createUser(userData: CreateUserDTO): Promise<User> {
+    const user = this.userRepository.create(userData);
+    return await this.userRepository.save(user);
   }
 
-  async findUserByProviderId(
-    providerId: string,
-    provider: string
-  ): Promise<User | null> {
-    return await this.userRepository.findUserByProviderId(providerId, provider);
+  async findUserById(id: number): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { id } });
+  }
+
+  async findUserByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   async findOrCreateUser(userData: CreateUserDTO): Promise<User> {
-    return await this.userRepository.findOrCreateUser(userData);
+    let user = await this.findUserByEmail(userData.email || "");
+
+    if (!user) {
+      user = await this.createUser(userData);
+    }
+
+    return user;
   }
 }
