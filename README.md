@@ -1,1 +1,1 @@
-# Aegis - Password manager and generator application
+# N3O Vaults - Password manager and generator application

@@ -6,11 +6,11 @@ import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Aegis - Secure Password Generator and Manager" },
+    { title: "N3O Vaults - Secure Password Generator and Manager" },
     {
       name: "description",
       content:
-        "Aegis helps you manage and create secure passwords effortlessly.",
+        "N3O Vaults helps you manage and create secure passwords effortlessly.",
     },
   ];
 }

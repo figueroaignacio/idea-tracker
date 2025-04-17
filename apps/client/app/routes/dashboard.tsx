@@ -7,8 +7,8 @@ import { Button } from "~/components/ui/button";
 
 export function meta() {
   return [
-    { title: "Aegis - Dashboard" },
-    { name: "description", content: "Aegis Dashboard" },
+    { title: "N3O Vaults - Dashboard" },
+    { name: "description", content: "N3O Vaults Dashboard" },
   ];
 }
 

@@ -2,7 +2,7 @@ import { PageHeader } from "~/components/page-header";
 
 export function meta() {
   return [
-    { title: "Aegis - Settings" },
+    { title: "N3O Vaults - Settings" },
     { name: "description", content: "Set your preferences." },
   ];
 }
