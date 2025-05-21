@@ -1,0 +1,40 @@
+# Node modules (para todos los paquetes)
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Archivos de entorno (variables secretas)
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos de lock de pnpm (opcional, si querés ignorarlos)
+# pnpm-lock.yaml
+
+# VS Code
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Directorios temporales de IDEs/editors
+.idea/
+*.swp
+*.swo
+
+# Frontend específicos
+.vite/
+*.local
+
+# Otros
+*.log
