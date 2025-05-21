@@ -1,5 +1,0 @@
-.turbo
-node_modules
-.react_router
-.env
-dist
