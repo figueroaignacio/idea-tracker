@@ -7,11 +7,7 @@
     "outDir": "dist",
     "rootDir": ".",
     "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src"]
-    }
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "drizzle.config.ts"]
 }
