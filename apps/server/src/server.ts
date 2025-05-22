@@ -1,5 +1,5 @@
 import { App } from './app';
-import { config } from './config/config';
+import { config } from './config';
 import { logger } from './utils/logger';
 
 const app = new App();
