@@ -1,8 +1,14 @@
-export function App() {
+import { Button, Container, Flex, Text } from '@radix-ui/themes';
+
+export default function App() {
   return (
-    <div>
-      <h1>Welcome to the Client App</h1>
-      <p>This is a simple React + Vite application.</p>
-    </div>
+    <Container size="4">
+      <Flex direction="column" gap="2">
+        <Text>HEHEHEHEHEHEHHEHEEHEHEHEHHE</Text>
+        <Button radius="large" variant="solid">
+          If you click me, I'll do nothing!
+        </Button>
+      </Flex>
+    </Container>
   );
 }
