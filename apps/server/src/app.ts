@@ -2,6 +2,7 @@ import express from 'express';
 
 // Middlewares
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
@@ -52,7 +53,4 @@ export class App {
       console.log(`🚀 Server running on http://localhost:${port}`);
     });
   }
-}
-function cors(arg0: any): any {
-  throw new Error('Function not implemented.');
 }
