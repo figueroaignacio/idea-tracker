@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { AuthService } from './auth.service';
 
 interface AuthConfig {
@@ -17,7 +17,7 @@ export class AuthController {
     this.config = config;
   }
 
-  async githubCallback(req: Request, res: Response) {
+  async githubCallback(req: Request, res: Response, next: NextFunction) {
     const code = req.query.code as string;
     if (!code) return res.status(400).send('Code is required');
 
@@ -63,7 +63,7 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      return res.json({ user });
+      return res.json({ user, token });
     } catch (error) {
       console.error(error);
       return res.status(500).send('Authentication failed');
@@ -78,5 +78,20 @@ export class AuthController {
       console.error(error);
       return res.status(500).send('Error al obtener proveedores');
     }
+  }
+
+  async profile(req: Request, res: Response) {
+    const user = (req as any).user;
+    if (!user) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    const dbUser = await this.authService.getUserProfile(user.id);
+    return res.json({ user: dbUser });
+  }
+
+  logout(req: Request, res: Response) {
+    this.authService.logout(res);
+    return res.status(200).json({ message: 'Logged out' });
   }
 }

@@ -1,4 +1,5 @@
 import { eq } from 'drizzle-orm';
+import { Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { db } from '../../db/client';
 import { users } from '../../db/schema';
@@ -33,15 +34,17 @@ export class AuthService {
     return newUser;
   }
 
-  generateJWT(user: { id: string; email: string }) {
-    return jwt.sign({ id: user.id, email: user.email }, authConfig.jwtSecret, {
-      expiresIn: '7d',
-    });
+  generateJWT(user: { id: string; email: string; provider: string }) {
+    return jwt.sign(
+      { id: user.id, email: user.email, provider: user.provider },
+      authConfig.jwtSecret,
+      { expiresIn: '7d' },
+    );
   }
 
   verifyJWT(token: string) {
     try {
-      return jwt.verify(token, authConfig.jwtSecret);
+      return jwt.verify(token, authConfig.jwtSecret) as { id: string; email: string };
     } catch {
       return null;
     }
@@ -49,5 +52,22 @@ export class AuthService {
 
   async getProviders(): Promise<string[]> {
     return Object.keys(authConfig).filter((key) => key !== 'jwtSecret');
+  }
+
+  async getUserProfile(userId: string) {
+    return db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .limit(1)
+      .then((res) => res[0]);
+  }
+
+  logout(res: Response) {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
   }
 }
