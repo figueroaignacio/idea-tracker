@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
+
+// Service
 import { AuthService } from '../auth.service';
 
 export class AuthMiddleware {

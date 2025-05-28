@@ -1,11 +1,23 @@
-import { eq } from 'drizzle-orm';
 import { Response } from 'express';
-import jwt from 'jsonwebtoken';
+
+// DB
+import { eq } from 'drizzle-orm';
 import { db } from '../../db/client';
 import { users } from '../../db/schema';
+
+// Config
 import authConfig from './config/auth.config';
 
+// Service
+import { JwtService } from './jwt.service';
+
 export class AuthService {
+  private jwtService: JwtService;
+
+  constructor() {
+    this.jwtService = new JwtService();
+  }
+
   async findOrCreateUser(profile: {
     name: string;
     email: string;
@@ -34,20 +46,20 @@ export class AuthService {
     return newUser;
   }
 
-  generateJWT(user: { id: string; email: string; provider: string }) {
-    return jwt.sign(
-      { id: user.id, email: user.email, provider: user.provider },
-      authConfig.jwtSecret,
-      { expiresIn: '7d' },
-    );
+  generateJWT(user: { id: string; email: string; provider: string }): string {
+    return this.jwtService.generateToken({
+      id: user.id,
+      email: user.email,
+      provider: user.provider,
+    });
   }
 
-  verifyJWT(token: string) {
-    try {
-      return jwt.verify(token, authConfig.jwtSecret) as { id: string; email: string };
-    } catch {
+  verifyJWT(token: string): object | null {
+    const result = this.jwtService.verifyToken(token);
+    if (typeof result === 'string' || result === null) {
       return null;
     }
+    return result;
   }
 
   async getProviders(): Promise<string[]> {

@@ -1,5 +1,8 @@
+// DB
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
+
+// Config
 import { config } from '../config';
 
 const pool = new Pool({

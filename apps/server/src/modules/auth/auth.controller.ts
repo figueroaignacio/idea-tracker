@@ -1,5 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
+
+// Service
 import { AuthService } from './auth.service';
+
+// Strategies
+import { GithubStrategy } from './strategies/github.strategy';
 
 interface AuthConfig {
   github: {
@@ -11,10 +16,12 @@ interface AuthConfig {
 export class AuthController {
   private authService: AuthService;
   private config: AuthConfig;
+  private githubStrategy: GithubStrategy;
 
   constructor(authService: AuthService, config: AuthConfig) {
     this.authService = authService;
     this.config = config;
+    this.githubStrategy = new GithubStrategy(config.github.clientId, config.github.clientSecret);
   }
 
   async githubCallback(req: Request, res: Response, next: NextFunction) {
@@ -22,38 +29,10 @@ export class AuthController {
     if (!code) return res.status(400).send('Code is required');
 
     try {
-      const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          client_id: this.config.github.clientId,
-          client_secret: this.config.github.clientSecret,
-          code,
-        }),
-      });
+      const accessToken = await this.githubStrategy.getAccessToken(code);
+      const profile = await this.githubStrategy.getUserProfile(accessToken);
 
-      const tokenData = await tokenResponse.json();
-      const accessToken = tokenData.access_token;
-      if (!accessToken) return res.status(400).send('No access token from GitHub');
-
-      const userResponse = await fetch('https://api.github.com/user', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-
-      if (!userResponse.ok) return res.status(400).send('Failed to fetch user profile');
-
-      const profile = await userResponse.json();
-
-      const user = await this.authService.findOrCreateUser({
-        name: profile.name || profile.login,
-        email: profile.email || '',
-        avatarUrl: profile.avatar_url,
-        provider: 'github',
-      });
-
+      const user = await this.authService.findOrCreateUser(profile);
       const token = this.authService.generateJWT(user);
 
       res.cookie('token', token, {

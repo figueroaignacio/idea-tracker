@@ -1,7 +1,13 @@
 import { Router } from 'express';
+
+// Controller and Service
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+
+// Config
 import authConfig from './config/auth.config';
+
+// Middleware
 import { AuthMiddleware } from './middleware/auth.middleware';
 
 export class AuthRoutes {
