@@ -5,16 +5,21 @@ import * as repo from './auth.repository';
 
 const SALT_ROUNDS = 10;
 
-export const signup = async (email: string, password: string) => {
-  const existing = await repo.findUserByEmail(email);
+export const signup = async (data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}) => {
+  const existing = await repo.findUserByEmail(data.email);
   if (existing) throw new Error('Email already in use');
 
-  const hashed = await bcrypt.hash(password, SALT_ROUNDS);
+  const hashed = await bcrypt.hash(data.password, SALT_ROUNDS);
   const user = await repo.createUser({
-    email,
+    email: data.email,
     password: hashed,
-    firstName: '',
-    lastName: '',
+    firstName: data.firstName,
+    lastName: data.lastName,
   });
 
   const accessToken = signAccessToken({ sub: user.id, email: user.email });

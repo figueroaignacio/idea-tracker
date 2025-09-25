@@ -14,13 +14,23 @@ const cookieOptions = {
 
 export const signupHandler = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    const { firstName, lastName, email, password } = req.body;
+    if (!email || !password || !firstName || !lastName) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
 
-    const { user, accessToken, refreshToken } = await service.signup(email, password);
+    const { user, accessToken, refreshToken } = await service.signup({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
 
     res.cookie('refreshToken', refreshToken, cookieOptions);
-    res.status(201).json({ user: { id: user.id, email: user.email }, accessToken });
+    res.status(201).json({
+      user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName },
+      accessToken,
+    });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
@@ -34,7 +44,15 @@ export const loginHandler = async (req: Request, res: Response) => {
     const { user, accessToken, refreshToken } = await service.login(email, password);
 
     res.cookie('refreshToken', refreshToken, cookieOptions);
-    res.json({ user: { id: user.id, email: user.email }, accessToken });
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      accessToken,
+    });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
@@ -58,12 +76,10 @@ export const refreshHandler = async (req: Request, res: Response) => {
 
     const hashed = crypto.createHash('sha256').update(token).digest('hex');
     if (!user.refresh_token || user.refresh_token !== hashed) {
-      // possible reuse or theft: clear stored token
       await repo.updateRefreshToken(user.id, null);
       return res.status(401).json({ error: 'Invalid token' });
     }
 
-    // rotate tokens
     const newAccess = signAccessToken({ sub: user.id, email: user.email });
     const newRefresh = signRefreshToken({ sub: user.id });
     const newHashed = crypto.createHash('sha256').update(newRefresh).digest('hex');
