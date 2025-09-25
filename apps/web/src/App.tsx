@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router';
 
 // Layouts
-import { AuthLayout } from './layout/layout';
+import { AuthLayout } from './layout/auth-layout';
 
 // Pages
 import { Dashboard } from './pages/dashboard';
