@@ -6,4 +6,8 @@ export const users = pgTable('users', {
   lastName: varchar('last_name', { length: 50 }).notNull(),
   email: varchar('email', { length: 100 }).notNull().unique(),
   password: varchar('password', { length: 255 }).notNull(),
+  refresh_token: varchar('refresh_token', { length: 255 }),
 });
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
