@@ -17,7 +17,7 @@ export function Header() {
   ];
 
   return (
-    <header className="border-b border-neutral py-4 backdrop-blur-lg sticky top-0">
+    <header className="py-4 backdrop-blur-lg sticky top-0">
       <div className="container flex justify-between items-center">
         <p>Logo</p>
         <div className="space-x-5">
