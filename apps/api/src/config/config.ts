@@ -15,7 +15,7 @@ interface Config {
   cookie: {
     secure: boolean;
     httpOnly: boolean;
-    sameSite: 'lax';
+    sameSite: 'strict' | 'lax' | 'none';
     maxAge: number;
   };
   clientOrigin: string;
@@ -34,9 +34,9 @@ const config: Config = {
     refreshTokenExpiresIn: '7d' as const,
   },
   cookie: {
-    secure: isProd,
+    secure: false,
     httpOnly: true,
-    sameSite: 'lax' as const,
+    sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
   },
   clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
