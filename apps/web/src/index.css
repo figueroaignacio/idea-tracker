@@ -1,1 +1,51 @@
 @import 'tailwindcss';
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: 'corporateDark';
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(12% 0.02 240);
+  --color-base-200: oklch(18% 0.03 240);
+  --color-base-300: oklch(22% 0.04 240);
+  --color-base-content: oklch(95% 0.01 240);
+
+  --color-primary: oklch(45% 0.15 240);
+  --color-primary-content: oklch(98% 0.01 240);
+  --color-secondary: oklch(40% 0.05 210);
+  --color-secondary-content: oklch(95% 0.01 240);
+  --color-accent: oklch(35% 0.05 150);
+  --color-accent-content: oklch(98% 0.01 240);
+
+  --color-neutral: oklch(25% 0.02 240);
+  --color-neutral-content: oklch(95% 0.01 240);
+  --color-border: oklch(50% 0.03 240);
+
+  --color-info: oklch(60% 0.1 220);
+  --color-info-content: oklch(98% 0.01 240);
+  --color-success: oklch(50% 0.15 140);
+  --color-success-content: oklch(98% 0.01 240);
+  --color-warning: oklch(70% 0.2 80);
+  --color-warning-content: oklch(20% 0.05 80);
+  --color-error: oklch(50% 0.2 10);
+  --color-error-content: oklch(98% 0.01 240);
+
+  --radius-selector: 0.75rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
+@layer {
+  .container {
+    @apply max-w-5xl mx-auto px-4;
+  }
+}

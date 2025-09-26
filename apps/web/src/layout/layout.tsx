@@ -1,10 +1,12 @@
+// Components
 import { Outlet } from 'react-router';
-import { AuthProvider } from '../providers/auth-provider';
+import { Header } from '../components/header';
 
 export function Layout() {
   return (
-    <AuthProvider>
+    <>
+      <Header />
       <Outlet />
-    </AuthProvider>
+    </>
   );
 }
