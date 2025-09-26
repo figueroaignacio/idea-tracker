@@ -26,12 +26,39 @@ export function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Signup</h2>
-      <input {...register('firstName')} type="text" placeholder="First name" />
-      <input {...register('lastName')} type="text" placeholder="Last name" />
-      <input {...register('email')} type="email" placeholder="Email" />
-      <input {...register('password')} type="password" placeholder="Password" />
-      <button type="submit">Signup</button>
+      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <legend className="fieldset-legend text-2xl">Sign Up</legend>
+        <div className="flex gap-3">
+          <div>
+            <label className="label">Firstname</label>
+            <input
+              {...register('firstName')}
+              type="text"
+              placeholder="First name"
+              className="input"
+            />
+          </div>
+          <div>
+            <label className="label">Lastname</label>
+            <input
+              {...register('lastName')}
+              type="text"
+              placeholder="Last name"
+              className="input"
+            />
+          </div>
+        </div>
+
+        <label className="label">Email</label>
+        <input {...register('email')} type="email" placeholder="Email" className="input" />
+
+        <label className="label">Password</label>
+        <input {...register('password')} type="password" placeholder="Password" className="input" />
+
+        <button type="submit" className="btn btn-primary mt-4">
+          Signup
+        </button>
+      </fieldset>
     </form>
   );
 }

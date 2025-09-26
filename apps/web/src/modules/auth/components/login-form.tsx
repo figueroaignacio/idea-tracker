@@ -24,10 +24,18 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Login</h2>
-      <input {...register('email')} type="email" placeholder="Email" />
-      <input {...register('password')} type="password" placeholder="Password" />
-      <button type="submit">Login</button>
+      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+        <legend className="fieldset-legend text-2xl">Login</legend>
+        <label className="label">Email</label>
+
+        <input {...register('email')} type="email" placeholder="Email " className="input" />
+        <label className="label">Password</label>
+
+        <input {...register('password')} type="password" placeholder="Password" className="input" />
+        <button type="submit" className="btn btn-primary mt-4">
+          Login
+        </button>
+      </fieldset>
     </form>
   );
 }

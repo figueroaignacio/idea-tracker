@@ -6,7 +6,9 @@ import { AuthProvider } from '../modules/auth/providers/auth-provider';
 export function AuthLayout() {
   return (
     <AuthProvider>
-      <Outlet />
+      <div className="min-h-[80lvh] flex justify-center items-center">
+        <Outlet />
+      </div>
     </AuthProvider>
   );
 }
