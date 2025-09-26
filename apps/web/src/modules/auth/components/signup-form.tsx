@@ -25,17 +25,20 @@ export function SignupForm() {
   } = useForm<SignupFormType>({
     resolver: zodResolver(signupSchema),
   });
+
   const { signup } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const onSubmit = async (data: SignupFormType) => {
     setIsSubmitting(true);
+    setServerError(null);
     try {
       await signup(data.firstName, data.lastName, data.email, data.password);
       navigate('/dashboard');
     } catch (err) {
-      alert((err as Error).message);
+      setServerError((err as Error).message);
     } finally {
       setIsSubmitting(false);
     }
@@ -43,9 +46,8 @@ export function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 space-y-2">
+      <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-4 space-y-2">
         <legend className="fieldset-legend text-2xl">Sign Up</legend>
-
         <div className="flex gap-3">
           <div className="space-y-2">
             <label className="label">Firstname</label>
@@ -55,11 +57,8 @@ export function SignupForm() {
               placeholder="First name"
               className="input"
             />
-            {errors.firstName && (
-              <p className="text-red-500 text-xss">{errors.firstName.message}</p>
-            )}
+            {errors.firstName && <p className="text-red-500 text-xs">{errors.firstName.message}</p>}
           </div>
-
           <div className="space-y-2">
             <label className="label">Lastname</label>
             <input
@@ -68,18 +67,20 @@ export function SignupForm() {
               placeholder="Last name"
               className="input"
             />
-            {errors.lastName && <p className="text-red-500 text-xss">{errors.lastName.message}</p>}
+            {errors.lastName && <p className="text-red-500 text-xs">{errors.lastName.message}</p>}
           </div>
         </div>
-
         <label className="label">Email</label>
-        <input {...register('email')} type="email" placeholder="Email" className="input" />
-        {errors.email && <p className="text-red-500 text-xss">{errors.email.message}</p>}
-
+        <input {...register('email')} type="email" placeholder="Email" className="input w-full" />
+        {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
         <label className="label">Password</label>
-        <input {...register('password')} type="password" placeholder="Password" className="input" />
-        {errors.password && <p className="text-red-500 text-xss">{errors.password.message}</p>}
-
+        <input
+          {...register('password')}
+          type="password"
+          placeholder="Password"
+          className="input w-full"
+        />
+        {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
         <button type="submit" className="btn btn-primary mt-4" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
@@ -90,6 +91,11 @@ export function SignupForm() {
             'Sign Up'
           )}
         </button>
+        {serverError && (
+          <div role="alert" className="alert alert-error alert-soft mt-4">
+            <span>{serverError}</span>
+          </div>
+        )}
       </fieldset>
     </form>
   );
