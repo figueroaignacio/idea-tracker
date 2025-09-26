@@ -1,3 +1,5 @@
+// Components
+import { EnterIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Link } from 'react-router';
 
 export function Header() {
@@ -5,13 +7,13 @@ export function Header() {
     {
       label: 'Sign Up',
       to: '/signup',
-      icon: '',
+      icon: PlusIcon,
       variant: 'btn btn-active btn-primary',
     },
     {
       label: 'Login',
       to: '/login',
-      icon: '',
+      icon: EnterIcon,
       variant: 'btn btn-ghost',
     },
   ];
@@ -22,8 +24,9 @@ export function Header() {
         <p>Logo</p>
         <div className="space-x-5">
           {actions.map((action) => (
-            <Link to={action.to} className={`${action.variant} rounded-xl`}>
+            <Link to={action.to} className={`${action.variant} rounded-xl`} key={action.to}>
               {action.label}
+              <action.icon />
             </Link>
           ))}
         </div>
