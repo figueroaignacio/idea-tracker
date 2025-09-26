@@ -4,6 +4,9 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/use-auth';
 
+// Components
+import { CrossCircledIcon } from '@radix-ui/react-icons';
+
 // Validation
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -69,6 +72,7 @@ export function LoginForm() {
         </button>
         {serverError && (
           <div role="alert" className="alert alert-error alert-soft mt-4">
+            <CrossCircledIcon />
             <span>{serverError}</span>
           </div>
         )}
