@@ -6,24 +6,24 @@ import { DashboardLayout } from './layout/dashboard-layout';
 import { Layout } from './layout/layout';
 
 // Pages
-import { Dashboard } from './pages/dashboard';
-import { Home } from './pages/home';
-import { Login } from './pages/login';
+import { DashboardPage } from './pages/dashboard-page';
+import { HomePage } from './pages/home-page';
+import { LoginPage } from './pages/login-login';
 import { NotFound } from './pages/not-found';
-import { Signup } from './pages/signup';
+import { SignupPage } from './pages/signup-page';
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomePage />} />
         <Route element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="signup" element={<SignupPage />} />
         </Route>
       </Route>
       <Route element={<DashboardLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
