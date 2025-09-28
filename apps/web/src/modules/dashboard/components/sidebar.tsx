@@ -1,6 +1,7 @@
 'use client';
 
 import { BarChart3, CheckCircle, Clock, Lightbulb, TrendingUp } from 'lucide-react';
+import { LogoutButton } from '../../auth/components/logout-button';
 import { type Idea } from './dashboard';
 
 interface SidebarProps {
@@ -23,6 +24,7 @@ export function Sidebar({ ideas }: SidebarProps) {
 
   return (
     <aside className="w-80 bg-base-200 border-r border-base-300 flex flex-col">
+      <LogoutButton />
       <div className="p-6 border-b border-base-300">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">

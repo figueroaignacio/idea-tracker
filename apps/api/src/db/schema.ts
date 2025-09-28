@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgEnum, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -9,5 +9,19 @@ export const users = pgTable('users', {
   refresh_token: varchar('refresh_token', { length: 255 }),
 });
 
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
+export const ideaPriority = pgEnum('idea_priority', ['low', 'medium', 'high', 'urgent']);
+export const ideaStatus = pgEnum('idea_status', ['idea', 'in-progress', 'completed', 'archived']);
+
+export const ideas = pgTable('ideas', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  category: varchar('category', { length: 100 }).notNull(),
+  priority: ideaPriority('priority').notNull(),
+  status: ideaStatus('status').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  tags: text('tags').array(),
+});

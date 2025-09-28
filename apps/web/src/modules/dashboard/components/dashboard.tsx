@@ -1,13 +1,13 @@
-'use client';
-
 import { Filter, Plus, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { config } from '../../../config/config';
+import { useAuth } from '../../auth/hooks/use-auth';
 import { AddIdeaDialog } from './add-idea-dialog';
 import { IdeaGrid } from './dashboard-grid';
 import { Sidebar } from './sidebar';
 
 export interface Idea {
-  id: string;
+  id: number;
   title: string;
   description: string;
   category: string;
@@ -17,81 +17,38 @@ export interface Idea {
   tags: string[];
 }
 
-const mockIdeas: Idea[] = [
-  {
-    id: '1',
-    title: 'AI-Powered Code Review',
-    description:
-      'Implement an AI system that automatically reviews code and suggests improvements based on best practices and security vulnerabilities.',
-    category: 'Development',
-    priority: 'high',
-    status: 'in-progress',
-    createdAt: new Date('2024-01-15'),
-    tags: ['AI', 'Code Quality', 'Automation'],
-  },
-  {
-    id: '2',
-    title: 'Dark Mode Theme System',
-    description:
-      'Create a comprehensive dark mode theme system with automatic switching based on user preferences and time of day.',
-    category: 'UI/UX',
-    priority: 'medium',
-    status: 'idea',
-    createdAt: new Date('2024-01-20'),
-    tags: ['Design', 'Accessibility', 'User Experience'],
-  },
-  {
-    id: '3',
-    title: 'Real-time Collaboration',
-    description:
-      'Add real-time collaboration features allowing multiple users to work on projects simultaneously with live cursors and changes.',
-    category: 'Features',
-    priority: 'urgent',
-    status: 'idea',
-    createdAt: new Date('2024-01-25'),
-    tags: ['Collaboration', 'Real-time', 'WebSocket'],
-  },
-  {
-    id: '4',
-    title: 'Performance Analytics Dashboard',
-    description:
-      'Build a comprehensive analytics dashboard to track application performance, user engagement, and system metrics.',
-    category: 'Analytics',
-    priority: 'medium',
-    status: 'completed',
-    createdAt: new Date('2024-01-10'),
-    tags: ['Analytics', 'Performance', 'Monitoring'],
-  },
-  {
-    id: '5',
-    title: 'Mobile App Companion',
-    description:
-      'Develop a mobile companion app that syncs with the web platform and provides offline capabilities.',
-    category: 'Mobile',
-    priority: 'low',
-    status: 'idea',
-    createdAt: new Date('2024-01-30'),
-    tags: ['Mobile', 'Sync', 'Offline'],
-  },
-  {
-    id: '6',
-    title: 'Advanced Search Engine',
-    description:
-      'Implement a powerful search engine with filters, sorting, and AI-powered semantic search capabilities.',
-    category: 'Features',
-    priority: 'high',
-    status: 'in-progress',
-    createdAt: new Date('2024-02-01'),
-    tags: ['Search', 'AI', 'Filters'],
-  },
-];
-
 export function Dashboard() {
-  const [ideas, setIdeas] = useState<Idea[]>(mockIdeas);
+  const { user, loading: authLoading } = useAuth();
+  const [ideas, setIdeas] = useState<Idea[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedPriority, setSelectedPriority] = useState<string>('all');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchIdeas = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${config.apiUrl}/api/ideas`, {
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('No se pudieron cargar las ideas');
+      const data: Idea[] = await res.json();
+      setIdeas(data.map((idea) => ({ ...idea, createdAt: new Date(idea.createdAt) })));
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      fetchIdeas();
+    }
+  }, [authLoading, user]);
 
   const categories = ['all', ...Array.from(new Set(ideas.map((idea) => idea.category)))];
   const priorities = ['all', 'low', 'medium', 'high', 'urgent'];
@@ -103,33 +60,74 @@ export function Dashboard() {
       idea.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === 'all' || idea.category === selectedCategory;
     const matchesPriority = selectedPriority === 'all' || idea.priority === selectedPriority;
-
     return matchesSearch && matchesCategory && matchesPriority;
   });
 
-  const handleAddIdea = (newIdea: Omit<Idea, 'id' | 'createdAt'>) => {
-    const idea: Idea = {
-      ...newIdea,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-    };
-    setIdeas([idea, ...ideas]);
-    setIsAddDialogOpen(false);
+  const handleAddIdea = async (newIdea: Omit<Idea, 'id' | 'createdAt'>) => {
+    try {
+      const res = await fetch(`${config.apiUrl}/api/ideas`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newIdea),
+      });
+      if (!res.ok) throw new Error('No se pudo crear la idea');
+      const created: Idea = await res.json();
+      setIdeas([{ ...created, createdAt: new Date(created.createdAt) }, ...ideas]);
+      setIsAddDialogOpen(false);
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
-  const handleUpdateIdea = (updatedIdea: Idea) => {
-    setIdeas(ideas.map((idea) => (idea.id === updatedIdea.id ? updatedIdea : idea)));
+  const handleUpdateIdea = async (updatedIdea: Idea) => {
+    try {
+      const res = await fetch(`${config.apiUrl}/api/ideas/${Number(updatedIdea.id)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          ...updatedIdea,
+          createdAt: updatedIdea.createdAt.toISOString(),
+          tags: updatedIdea.tags ?? [],
+        }),
+      });
+
+      if (!res.ok) throw new Error('No se pudo actualizar la idea');
+      const updated: Idea = await res.json();
+      setIdeas((prev) =>
+        prev.map((i) =>
+          i.id === updated.id ? { ...updated, createdAt: new Date(updated.createdAt) } : i,
+        ),
+      );
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
-  const handleDeleteIdea = (ideaId: string) => {
-    setIdeas(ideas.filter((idea) => idea.id !== ideaId));
+  const handleDeleteIdea = async (ideaId: string) => {
+    try {
+      const res = await fetch(`${config.apiUrl}/api/ideas/${ideaId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('No se pudo eliminar la idea');
+      setIdeas(ideas.filter((idea) => idea.id !== Number(ideaId)));
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
+
+  if (authLoading) return <p className="p-6 text-center">Cargando sesión...</p>;
+  if (!user)
+    return <p className="p-6 text-center text-error">Debes iniciar sesión para ver tus ideas</p>;
 
   return (
     <div className="flex h-screen bg-base-100" data-theme="dark">
       <Sidebar ideas={ideas} />
 
       <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
         <header className="border-b border-base-300 bg-base-200/50 backdrop-blur-sm">
           <div className="flex items-center justify-between p-6">
             <div>
@@ -148,6 +146,7 @@ export function Dashboard() {
           </div>
         </header>
 
+        {/* Filters */}
         <div className="border-b border-base-300 bg-base-200/30 backdrop-blur-sm">
           <div className="flex items-center gap-4 p-6">
             <div className="relative flex-1 max-w-md">
@@ -194,18 +193,24 @@ export function Dashboard() {
 
         {/* Content */}
         <div className="flex-1 overflow-auto p-6">
-          <IdeaGrid
-            ideas={filteredIdeas}
-            onUpdateIdea={handleUpdateIdea}
-            onDeleteIdea={handleDeleteIdea}
-          />
+          {loading ? (
+            <p className="text-center text-base-content/50">Cargando ideas...</p>
+          ) : error ? (
+            <p className="text-center text-error">{error}</p>
+          ) : (
+            <IdeaGrid
+              ideas={filteredIdeas}
+              onUpdateIdea={handleUpdateIdea}
+              onDeleteIdea={handleDeleteIdea}
+            />
+          )}
         </div>
       </main>
 
       <AddIdeaDialog
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
-        onAddIdea={handleAddIdea}
+        onAddIdea={handleAddIdea} // <-- ya se conecta con backend
       />
     </div>
   );

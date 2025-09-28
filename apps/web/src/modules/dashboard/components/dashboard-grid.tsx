@@ -1,5 +1,3 @@
-'use client';
-
 import { Archive, CheckCircle, Lightbulb, MoreHorizontal, Play, Trash2 } from 'lucide-react';
 import { type Idea } from './dashboard';
 
@@ -59,7 +57,7 @@ export function IdeaGrid({ ideas, onUpdateIdea, onDeleteIdea }: IdeaGridProps) {
         return (
           <div
             key={idea.id}
-            className="card bg-base-200 border border-base-300 hover:border-base-content/20 transition-all duration-200 group shadow-sm"
+            className="card bg-base-200 border border-base-300 hover:border-base-content/20 transition-all duration-200 shadow-sm"
           >
             <div className="card-body p-6">
               <div className="space-y-4">
@@ -77,7 +75,7 @@ export function IdeaGrid({ ideas, onUpdateIdea, onDeleteIdea }: IdeaGridProps) {
                     </div>
                   </div>
 
-                  <div className="dropdown dropdown-end opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="dropdown dropdown-end ">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-sm">
                       <MoreHorizontal className="w-4 h-4" />
                     </div>
@@ -91,6 +89,7 @@ export function IdeaGrid({ ideas, onUpdateIdea, onDeleteIdea }: IdeaGridProps) {
                           Marcar en progreso
                         </button>
                       </li>
+
                       <li>
                         <button onClick={() => handleStatusChange(idea, 'completed')}>
                           <CheckCircle className="w-4 h-4" />
@@ -105,7 +104,7 @@ export function IdeaGrid({ ideas, onUpdateIdea, onDeleteIdea }: IdeaGridProps) {
                       </li>
                       <li>
                         <button
-                          onClick={() => onDeleteIdea(idea.id)}
+                          onClick={() => onDeleteIdea(String(idea.id))}
                           className="text-error hover:text-error"
                         >
                           <Trash2 className="w-4 h-4" />

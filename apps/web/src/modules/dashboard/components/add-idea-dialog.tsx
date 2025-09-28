@@ -8,6 +8,7 @@ import { type Idea } from './dashboard';
 interface AddIdeaDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onAddSuccess?: (idea: Idea) => void;
   onAddIdea: (idea: Omit<Idea, 'id' | 'createdAt'>) => void;
 }
 
@@ -30,97 +31,91 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
   const [status, setStatus] = useState<Idea['status']>('idea');
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title.trim() || !description.trim() || !category) return;
 
-    if (!title.trim() || !description.trim() || !category) {
-      return;
+    setLoading(true);
+    setError(null);
+
+    try {
+      await onAddIdea({ title, description, category, priority, status, tags });
+      // Limpiar formulario
+      setTitle('');
+      setDescription('');
+      setCategory('');
+      setPriority('medium');
+      setStatus('idea');
+      setTags([]);
+      setTagInput('');
+      onOpenChange(false);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    onAddIdea({
-      title: title.trim(),
-      description: description.trim(),
-      category,
-      priority,
-      status,
-      tags,
-    });
-
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setCategory('');
-    setPriority('medium');
-    setStatus('idea');
-    setTags([]);
-    setTagInput('');
   };
 
   const handleAddTag = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
-      if (!tags.includes(tagInput.trim())) {
-        setTags([...tags, tagInput.trim()]);
-      }
+      if (!tags.includes(tagInput.trim())) setTags([...tags, tagInput.trim()]);
       setTagInput('');
     }
   };
 
-  const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
-  };
+  const removeTag = (tag: string) => setTags(tags.filter((t) => t !== tag));
 
   if (!open) return null;
 
   return (
-    <div className="modal modal-open">
-      <div className="modal-box w-11/12 max-w-2xl bg-base-200 border border-base-300">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-bold text-lg text-base-content">Agregar Nueva Idea</h3>
-          <button className="btn btn-sm btn-circle btn-ghost" onClick={() => onOpenChange(false)}>
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-base-200 w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
+        <button
+          className="absolute top-4 right-4 btn btn-ghost btn-sm btn-circle"
+          onClick={() => onOpenChange(false)}
+        >
+          <X className="w-5 h-5" />
+        </button>
+        <h3 className="text-2xl font-bold mb-4 text-center">Agregar Nueva Idea</h3>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {error && <div className="alert alert-error mb-4">{error}</div>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium">Título *</span>
-            </label>
+            <label className="label font-medium">Título *</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Título de tu idea..."
-              className="input input-bordered bg-base-100/50 border-base-300/50"
+              className="input input-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
               required
             />
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium">Descripción *</span>
-            </label>
+            <label className="label font-medium">Descripción *</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe tu idea en detalle..."
+              placeholder="Describe tu idea..."
               rows={4}
-              className="textarea textarea-bordered bg-base-100/50 border-base-300/50 resize-none"
+              className="textarea textarea-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20 resize-none"
               required
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Categoría *</span>
-              </label>
+              <label className="label font-medium">Categoría *</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="select select-bordered bg-base-100/50 border-base-300/50"
+                className="select select-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
                 required
               >
                 <option value="">Selecciona categoría</option>
@@ -133,13 +128,11 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
             </div>
 
             <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Prioridad</span>
-              </label>
+              <label className="label font-medium">Prioridad</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as Idea['priority'])}
-                className="select select-bordered bg-base-100/50 border-base-300/50"
+                className="select select-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
               >
                 <option value="low">Baja</option>
                 <option value="medium">Media</option>
@@ -150,13 +143,11 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium">Estado</span>
-            </label>
+            <label className="label font-medium">Estado</label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as Idea['status'])}
-              className="select select-bordered bg-base-100/50 border-base-300/50"
+              className="select select-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
             >
               <option value="idea">Idea</option>
               <option value="in-progress">En progreso</option>
@@ -166,41 +157,45 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium">Tags</span>
-            </label>
+            <label className="label font-medium">Tags</label>
             <input
               type="text"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
-              placeholder="Escribe un tag y presiona Enter..."
-              className="input input-bordered bg-base-100/50 border-base-300/50"
+              placeholder="Presiona Enter para agregar tag"
+              className="input input-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
             />
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {tags.map((tag) => (
-                  <div key={tag} className="badge badge-secondary flex items-center gap-1">
+                  <span
+                    key={tag}
+                    className="badge badge-primary flex items-center gap-1 cursor-pointer"
+                  >
                     {tag}
-                    <button
-                      type="button"
-                      onClick={() => removeTag(tag)}
-                      className="ml-1 hover:text-error"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
+                    <X className="w-3 h-3 ml-1 hover:text-error" onClick={() => removeTag(tag)} />
+                  </span>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="modal-action">
-            <button type="button" className="btn btn-outline" onClick={() => onOpenChange(false)}>
+          <div className="flex justify-end gap-3 mt-4">
+            <button
+              type="button"
+              className="btn btn-outline hover:bg-base-300"
+              onClick={() => onOpenChange(false)}
+              disabled={loading}
+            >
               Cancelar
             </button>
-            <button type="submit" className="btn btn-primary gradient-btn">
-              Agregar Idea
+            <button
+              type="submit"
+              className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 shadow-lg"
+              disabled={loading}
+            >
+              {loading ? 'Agregando...' : 'Agregar Idea'}
             </button>
           </div>
         </form>
