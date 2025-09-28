@@ -8,7 +8,7 @@ export function Header() {
       label: 'Sign Up',
       to: '/signup',
       icon: PlusIcon,
-      variant: 'btn btn-active btn-primary',
+      variant: 'btn btn-soft btn-info',
     },
     {
       label: 'Login',

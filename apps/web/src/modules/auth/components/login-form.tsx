@@ -60,7 +60,7 @@ export function LoginForm() {
           className="input w-full"
         />
         {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
-        <button type="submit" className="btn btn-primary mt-4" disabled={isSubmitting}>
+        <button type="submit" className="btn btn-soft btn-info mt-4" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
               <span className="loading loading-spinner mr-2"></span>
