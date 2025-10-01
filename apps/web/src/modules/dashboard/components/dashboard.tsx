@@ -141,7 +141,7 @@ export function Dashboard() {
     return <p className="p-6 text-center text-error">Debes iniciar sesión para ver tus ideas</p>;
 
   return (
-    <div className="flex h-screen bg-base-100" data-theme="dark">
+    <div className="flex h-screen">
       <main className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader onAddIdea={() => setIsAddDialogOpen(true)} />
         <DashboardFilters

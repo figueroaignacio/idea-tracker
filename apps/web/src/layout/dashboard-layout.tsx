@@ -33,7 +33,7 @@ export function DashboardLayout() {
 
   return (
     <ProtectedRoute>
-      <div className="grid grid-cols-6 bg-base-100" data-theme="dark">
+      <div className="grid grid-cols-6 bg-base-100">
         <MobileSidebar ideas={ideas} />
         <div className="col-span-0 md:col-span-2">
           <Sidebar ideas={ideas} />
