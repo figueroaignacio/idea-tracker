@@ -8,7 +8,6 @@ import { AddIdeaDialog } from './add-idea-dialog';
 import { DashboardFilters } from './dashboard-filters';
 import { IdeaGrid } from './dashboard-grid';
 import { DashboardHeader } from './dashboard-header';
-import { Sidebar } from './sidebar';
 
 // Types
 import type { Idea } from '../types/idea';
@@ -143,7 +142,6 @@ export function Dashboard() {
 
   return (
     <div className="flex h-screen bg-base-100" data-theme="dark">
-      <Sidebar ideas={ideas} />
       <main className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader onAddIdea={() => setIsAddDialogOpen(true)} />
         <DashboardFilters

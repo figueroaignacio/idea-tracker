@@ -14,7 +14,7 @@ export function LogoutButton() {
   return (
     <>
       <button
-        className="btn btn-error"
+        className="btn btn-error shadow-none text-white btn-sm"
         onClick={() => {
           const modal = document.getElementById('my_modal_1') as HTMLDialogElement | null;
           if (modal) {
@@ -28,16 +28,22 @@ export function LogoutButton() {
         <div className="modal-box">
           <h3 className="font-bold text-lg">Are you sure?</h3>
           <p className="py-4">You are about to log out your account.</p>
-          <div className="modal-action">
-            <form method="dialog">
-              <button className="btn" onClick={onLogout}>
-                Log Out
-              </button>
-            </form>
+          <div className="flex justify-end gap-x-3">
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn btn-ghost">Cancel</button>
+              </form>
+            </div>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn btn-error shadow-none text-white" onClick={onLogout}>
+                  Log Out
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </dialog>
     </>
   );
-  // return <button onClick={onLogout}>Logout</button>;
 }

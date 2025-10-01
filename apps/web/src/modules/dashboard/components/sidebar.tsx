@@ -1,8 +1,8 @@
-'use client';
-
+// Components
 import { BarChart3, CheckCircle, Clock, Lightbulb, TrendingUp } from 'lucide-react';
-import { LogoutButton } from '../../auth/components/logout-button';
-import { type Idea } from './dashboard';
+
+// Types
+import type { Idea } from '../types/idea';
 
 interface SidebarProps {
   ideas: Idea[];
@@ -23,8 +23,7 @@ export function Sidebar({ ideas }: SidebarProps) {
     .slice(0, 5);
 
   return (
-    <aside className="w-80 bg-base-200 border-r border-base-300 flex flex-col">
-      <LogoutButton />
+    <aside className="min-h-full bg-base-200 border-r border-base-300 md:flex flex-col hidden">
       <div className="p-6 border-b border-base-300">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
@@ -32,7 +31,7 @@ export function Sidebar({ ideas }: SidebarProps) {
           </div>
           <div>
             <h2 className="font-semibold text-base-content">Ideas Dashboard</h2>
-            <p className="text-sm text-base-content/70">Resumen general</p>
+            <p className="text-sm text-base-content/70">General Summary</p>
           </div>
         </div>
       </div>
@@ -40,7 +39,7 @@ export function Sidebar({ ideas }: SidebarProps) {
       <div className="flex-1 overflow-auto p-6 space-y-6">
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-base-content/70 uppercase tracking-wider">
-            Estadísticas
+            Statistics
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
@@ -62,7 +61,7 @@ export function Sidebar({ ideas }: SidebarProps) {
                   <TrendingUp className="w-4 h-4 text-warning" />
                   <div>
                     <p className="text-2xl font-bold text-base-content">{stats.inProgress}</p>
-                    <p className="text-xs text-base-content/70">En Progreso</p>
+                    <p className="text-xs text-base-content/70">In progress</p>
                   </div>
                 </div>
               </div>
@@ -74,7 +73,7 @@ export function Sidebar({ ideas }: SidebarProps) {
                   <CheckCircle className="w-4 h-4 text-success" />
                   <div>
                     <p className="text-2xl font-bold text-base-content">{stats.completed}</p>
-                    <p className="text-xs text-base-content/70">Completadas</p>
+                    <p className="text-xs text-base-content/70">Completed</p>
                   </div>
                 </div>
               </div>
@@ -86,7 +85,7 @@ export function Sidebar({ ideas }: SidebarProps) {
                   <Clock className="w-4 h-4 text-error" />
                   <div>
                     <p className="text-2xl font-bold text-base-content">{stats.highPriority}</p>
-                    <p className="text-xs text-base-content/70">Alta Prioridad</p>
+                    <p className="text-xs text-base-content/70">High priority</p>
                   </div>
                 </div>
               </div>
@@ -96,7 +95,7 @@ export function Sidebar({ ideas }: SidebarProps) {
 
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-base-content/70 uppercase tracking-wider">
-            Ideas Recientes
+            Recent Ideas
           </h3>
 
           <div className="space-y-3">

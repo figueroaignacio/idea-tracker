@@ -1,12 +1,14 @@
+'use client';
+
 // Hooks
 import { useState } from 'react';
 
 // Components
-import { X } from 'lucide-react';
+import { Plus, Sparkles, Tag, X } from 'lucide-react';
 
 // Types
 import type React from 'react';
-import { type Idea } from './dashboard';
+import type { Idea } from '../types/idea';
 
 interface AddIdeaDialogProps {
   open: boolean;
@@ -37,8 +39,7 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!title.trim() || !description.trim() || !category) return;
 
     setLoading(true);
@@ -58,7 +59,7 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Ocurrió un error al agregar la idea.');
+        setError('An error occurred while adding the idea.');
       }
     } finally {
       setLoading(false);
@@ -78,135 +79,212 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-base-200 w-full max-w-2xl rounded-xl shadow-lg p-6 relative">
-        <button
-          className="absolute top-4 right-4 btn btn-ghost btn-sm btn-circle"
-          onClick={() => onOpenChange(false)}
-        >
-          <X className="w-5 h-5" />
-        </button>
-        <h3 className="text-2xl font-bold mb-4 text-center">Agregar Nueva Idea</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4  backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-base-100 w-full max-w-3xl rounded-3xl shadow-2xl relative animate-in zoom-in-95 duration-200 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/10 px-8 py-6 border-b border-base-300">
+          <button
+            type="button"
+            className="absolute top-4 right-4 btn btn-sm btn-circle btn-ghost"
+            onClick={() => onOpenChange(false)}
+          >
+            <X className="w-5 h-5" />
+          </button>
 
-        {error && <div className="alert alert-error mb-4">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="form-control">
-            <label className="label font-medium">Título *</label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Título de tu idea..."
-              className="input input-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
-              required
-            />
-          </div>
-
-          <div className="form-control">
-            <label className="label font-medium">Descripción *</label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe tu idea..."
-              rows={4}
-              className="textarea textarea-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20 resize-none"
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="label font-medium">Categoría *</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="select select-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
-                required
-              >
-                <option value="">Selecciona categoría</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+          <div className="flex items-center gap-4">
+            <div className="bg-primary text-primary-content p-3 rounded-2xl shadow-lg">
+              <Sparkles className="w-7 h-7" />
             </div>
-
-            <div className="form-control">
-              <label className="label font-medium">Prioridad</label>
-              <select
-                value={priority}
-                onChange={(e) => setPriority(e.target.value as Idea['priority'])}
-                className="select select-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
-              >
-                <option value="low">Baja</option>
-                <option value="medium">Media</option>
-                <option value="high">Alta</option>
-                <option value="urgent">Urgente</option>
-              </select>
+            <div>
+              <h2 className="text-3xl font-bold">Add New Idea</h2>
+              <p className="text-sm text-base-content/60 mt-1">Capture your brilliant thoughts</p>
             </div>
           </div>
+        </div>
 
-          <div className="form-control">
-            <label className="label font-medium">Estado</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as Idea['status'])}
-              className="select select-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
-            >
-              <option value="idea">Idea</option>
-              <option value="in-progress">En progreso</option>
-              <option value="completed">Completada</option>
-              <option value="archived">Archivada</option>
-            </select>
-          </div>
+        {/* Content */}
+        <div className="px-8 py-6 max-h-[60vh] overflow-y-auto">
+          {error && (
+            <div className="alert alert-error mb-6 shadow-lg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
 
-          <div className="form-control">
-            <label className="label font-medium">Tags</label>
-            <input
-              type="text"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-              onKeyDown={handleAddTag}
-              placeholder="Presiona Enter para agregar tag"
-              className="input input-bordered bg-base-100 border-base-300 focus:border-primary focus:ring focus:ring-primary/20"
-            />
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="badge badge-primary flex items-center gap-1 cursor-pointer"
-                  >
-                    {tag}
-                    <X className="w-3 h-3 ml-1 hover:text-error" onClick={() => removeTag(tag)} />
+          <div className="space-y-6">
+            {/* Title */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold text-base flex items-center gap-2">
+                  Title
+                  <span className="text-xs text-error">*</span>
+                </span>
+              </label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="What's your idea?"
+                className="input w-full focus:input-primary"
+              />
+            </div>
+
+            {/* Description */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold text-base flex items-center gap-2">
+                  Description
+                  <span className="text-xs text-error">*</span>
+                </span>
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe your idea in detail..."
+                rows={5}
+                className="textarea textarea-bordered w-full focus:textarea-primary resize-none leading-relaxed"
+              />
+            </div>
+
+            {/* Category and Priority */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold text-base flex items-center gap-2">
+                    Category
+                    <span className="text-xs text-error">*</span>
                   </span>
-                ))}
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="select select-bordered w-full focus:select-primary"
+                >
+                  <option value="" disabled>
+                    Choose a category
+                  </option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
               </div>
-            )}
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold text-base">Priority Level</span>
+                </label>
+                <select
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value as Idea['priority'])}
+                  className="select select-bordered  w-full focus:select-primary"
+                >
+                  <option value="low">Low Priority</option>
+                  <option value="medium">Medium Priority</option>
+                  <option value="high">High Priority</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold text-base">Current Status</span>
+              </label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value as Idea['status'])}
+                className="select select-bordered  w-full focus:select-primary"
+              >
+                <option value="idea">💡 Idea</option>
+                <option value="in-progress">🚧 In Progress</option>
+                <option value="completed">✅ Completed</option>
+                <option value="archived">📦 Archived</option>
+              </select>
+            </div>
+
+            {/* Tags */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-semibold text-base flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  Tags
+                </span>
+                <span className="label-text-alt text-base-content/60">Press Enter to add</span>
+              </label>
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleAddTag}
+                placeholder="Add tags to organize..."
+                className="input input-bordered w-full focus:input-primary"
+              />
+              {tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {tags.map((tag) => (
+                    <div
+                      key={tag}
+                      className="badge badge-primary gap-2 px-4 py-4 cursor-pointer hover:scale-105 transition-transform"
+                      onClick={() => removeTag(tag)}
+                    >
+                      <span>{tag}</span>
+                      <X className="w-3.5 h-3.5" />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex items-center justify-end gap-3 mt-4">
+        </div>
+
+        {/* Footer */}
+        <div className="bg-base-200 px-8 py-5 border-t border-base-300 flex items-center justify-between">
+          <p className="text-sm text-base-content/50">
+            <span className="text-error">*</span> Required fields
+          </p>
+          <div className="flex gap-3">
             <button
               type="button"
-              className="btn btn-outline"
+              className="btn btn-ghost"
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
-              Cancelar
+              Cancel
             </button>
-            <button type="submit" className="btn btn-soft btn-info mt-4" disabled={loading}>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="btn btn-primary gap-2 shadow-lg hover:shadow-xl transition-all"
+              disabled={loading || !title.trim() || !description.trim() || !category}
+            >
               {loading ? (
                 <>
-                  <span className="loading loading-spinner mr-2"></span>
-                  Agregando idea
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Adding...
                 </>
               ) : (
-                'Agregar'
+                <>
+                  <Plus className="w-5 h-5" />
+                  Add Idea
+                </>
               )}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

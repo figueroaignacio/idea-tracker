@@ -28,7 +28,7 @@ export function DashboardFilters({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50 w-4 h-4" />
           <input
             type="text"
-            placeholder="Buscar ideas, tags o descripción..."
+            placeholder="Search ideas..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="input input-bordered w-full pl-10 bg-base-100/50 border-base-300/50"
@@ -44,7 +44,7 @@ export function DashboardFilters({
           >
             {categories.map((category) => (
               <option key={category} value={category}>
-                {category === 'all' ? 'Todas las categorías' : category}
+                {category === 'all' ? 'All Categories' : category}
               </option>
             ))}
           </select>
@@ -56,9 +56,7 @@ export function DashboardFilters({
           >
             {priorities.map((priority) => (
               <option key={priority} value={priority}>
-                {priority === 'all'
-                  ? 'Todas'
-                  : priority.charAt(0).toUpperCase() + priority.slice(1)}
+                {priority === 'all' ? 'All' : priority.charAt(0).toUpperCase() + priority.slice(1)}
               </option>
             ))}
           </select>

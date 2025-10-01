@@ -7,9 +7,9 @@ export function EmptyState() {
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-base-300 flex items-center justify-center">
           <Lightbulb className="w-8 h-8 text-base-content/50" />
         </div>
-        <h3 className="text-lg font-medium text-base-content mb-2">No hay ideas</h3>
+        <h3 className="text-lg font-medium text-base-content mb-2">No ideas found</h3>
         <p className="text-base-content/70">
-          Comienza agregando tu primera idea para hacer seguimiento de tus proyectos.
+          Start adding your first idea to start tracking your projects.
         </p>
       </div>
     </div>

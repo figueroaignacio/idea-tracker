@@ -94,7 +94,7 @@ function CardMenu({
 }
 
 function CardDescription({ description }: { description: string }) {
-  return <p className="text-sm text-base-content/70 line-clamp-3 text-pretty">{description}</p>;
+  return <p className="text-sm text-base-content/70  text-pretty">{description}</p>;
 }
 
 function CardTags({ tags }: { tags: string[] }) {
