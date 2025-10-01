@@ -1,8 +1,11 @@
-'use client';
-
-import { X } from 'lucide-react';
-import type React from 'react';
+// Hooks
 import { useState } from 'react';
+
+// Components
+import { X } from 'lucide-react';
+
+// Types
+import type React from 'react';
 import { type Idea } from './dashboard';
 
 interface AddIdeaDialogProps {
@@ -43,7 +46,6 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
 
     try {
       await onAddIdea({ title, description, category, priority, status, tags });
-      // Limpiar formulario
       setTitle('');
       setDescription('');
       setCategory('');
@@ -52,8 +54,12 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
       setTags([]);
       setTagInput('');
       onOpenChange(false);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Ocurrió un error al agregar la idea.');
+      }
     } finally {
       setLoading(false);
     }
@@ -180,22 +186,24 @@ export function AddIdeaDialog({ open, onOpenChange, onAddIdea }: AddIdeaDialogPr
               </div>
             )}
           </div>
-
-          <div className="flex justify-end gap-3 mt-4">
+          <div className="flex items-center justify-end gap-3 mt-4">
             <button
               type="button"
-              className="btn btn-outline hover:bg-base-300"
+              className="btn btn-outline"
               onClick={() => onOpenChange(false)}
               disabled={loading}
             >
               Cancelar
             </button>
-            <button
-              type="submit"
-              className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 shadow-lg"
-              disabled={loading}
-            >
-              {loading ? 'Agregando...' : 'Agregar Idea'}
+            <button type="submit" className="btn btn-soft btn-info mt-4" disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner mr-2"></span>
+                  Agregando idea
+                </>
+              ) : (
+                'Agregar'
+              )}
             </button>
           </div>
         </form>

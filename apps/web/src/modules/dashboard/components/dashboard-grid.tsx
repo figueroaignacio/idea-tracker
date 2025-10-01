@@ -1,4 +1,7 @@
+// Components
 import { Archive, CheckCircle, Lightbulb, MoreHorizontal, Play, Trash2 } from 'lucide-react';
+
+// Types
 import { type Idea } from './dashboard';
 
 interface IdeaGridProps {

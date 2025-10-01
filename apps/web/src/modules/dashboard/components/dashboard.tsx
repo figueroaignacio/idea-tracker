@@ -1,10 +1,15 @@
-import { Filter, Plus, Search } from 'lucide-react';
+// Hooks
 import { useEffect, useState } from 'react';
-import { config } from '../../../config/config';
 import { useAuth } from '../../auth/hooks/use-auth';
+
+// Components
+import { Filter, Plus, Search } from 'lucide-react';
 import { AddIdeaDialog } from './add-idea-dialog';
 import { IdeaGrid } from './dashboard-grid';
 import { Sidebar } from './sidebar';
+
+// Config
+import { config } from '../../../config/config';
 
 export interface Idea {
   id: number;
@@ -37,8 +42,12 @@ export function Dashboard() {
       if (!res.ok) throw new Error('No se pudieron cargar las ideas');
       const data: Idea[] = await res.json();
       setIdeas(data.map((idea) => ({ ...idea, createdAt: new Date(idea.createdAt) })));
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Ocurrió un error desconocido');
+      }
     } finally {
       setLoading(false);
     }
@@ -75,8 +84,12 @@ export function Dashboard() {
       const created: Idea = await res.json();
       setIdeas([{ ...created, createdAt: new Date(created.createdAt) }, ...ideas]);
       setIsAddDialogOpen(false);
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Ocurrió un error desconocido');
+      }
     }
   };
 
@@ -107,9 +120,12 @@ export function Dashboard() {
           i.id === updated.id ? { ...updated, createdAt: new Date(updated.createdAt) } : i,
         ),
       );
-    } catch (err: any) {
-      console.error('Error actualizando idea:', err);
-      alert('Error: ' + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Ocurrió un error desconocido');
+      }
     }
   };
 
@@ -121,8 +137,12 @@ export function Dashboard() {
       });
       if (!res.ok) throw new Error('No se pudo eliminar la idea');
       setIdeas(ideas.filter((idea) => idea.id !== Number(ideaId)));
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Ocurrió un error desconocido');
+      }
     }
   };
 
