@@ -43,7 +43,12 @@ export const updateIdea = async (
     })
     .where(eq(ideas.id, id))
     .returning();
-  return updatedIdea ?? null;
+
+  if (!updatedIdea) {
+    throw new Error('Idea not found');
+  }
+
+  return updatedIdea;
 };
 
 export const deleteIdea = async (id: number) => {

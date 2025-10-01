@@ -82,18 +82,25 @@ export function Dashboard() {
 
   const handleUpdateIdea = async (updatedIdea: Idea) => {
     try {
-      const res = await fetch(`${config.apiUrl}/api/ideas/${Number(updatedIdea.id)}`, {
+      const res = await fetch(`${config.apiUrl}/api/ideas/${updatedIdea.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({
-          ...updatedIdea,
-          createdAt: updatedIdea.createdAt.toISOString(),
+          title: updatedIdea.title,
+          description: updatedIdea.description,
+          category: updatedIdea.category,
+          priority: updatedIdea.priority,
+          status: updatedIdea.status,
           tags: updatedIdea.tags ?? [],
         }),
       });
 
-      if (!res.ok) throw new Error('No se pudo actualizar la idea');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'No se pudo actualizar la idea');
+      }
+
       const updated: Idea = await res.json();
       setIdeas((prev) =>
         prev.map((i) =>
@@ -101,11 +108,12 @@ export function Dashboard() {
         ),
       );
     } catch (err: any) {
-      alert(err.message);
+      console.error('Error actualizando idea:', err);
+      alert('Error: ' + err.message);
     }
   };
 
-  const handleDeleteIdea = async (ideaId: string) => {
+  const handleDeleteIdea = async (ideaId: number) => {
     try {
       const res = await fetch(`${config.apiUrl}/api/ideas/${ideaId}`, {
         method: 'DELETE',
@@ -210,7 +218,7 @@ export function Dashboard() {
       <AddIdeaDialog
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
-        onAddIdea={handleAddIdea} // <-- ya se conecta con backend
+        onAddIdea={handleAddIdea}
       />
     </div>
   );

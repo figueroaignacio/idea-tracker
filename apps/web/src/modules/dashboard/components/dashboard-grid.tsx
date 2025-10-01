@@ -4,7 +4,7 @@ import { type Idea } from './dashboard';
 interface IdeaGridProps {
   ideas: Idea[];
   onUpdateIdea: (idea: Idea) => void;
-  onDeleteIdea: (ideaId: string) => void;
+  onDeleteIdea: (ideaId: number) => void;
 }
 
 const priorityColors = {
@@ -104,7 +104,7 @@ export function IdeaGrid({ ideas, onUpdateIdea, onDeleteIdea }: IdeaGridProps) {
                       </li>
                       <li>
                         <button
-                          onClick={() => onDeleteIdea(String(idea.id))}
+                          onClick={() => onDeleteIdea(idea.id)}
                           className="text-error hover:text-error"
                         >
                           <Trash2 className="w-4 h-4" />

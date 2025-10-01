@@ -36,14 +36,36 @@ export const getIdeaByIdHandler = async (req: Request, res: Response) => {
 
 export const updateIdeaHandler = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
+  const userId = (req as any).userId as number;
+
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'Invalid idea ID' });
+  }
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
 
   try {
+    const existingIdea = await service.getIdeaByIdService(id);
+
+    if (existingIdea.userId !== userId) {
+      return res.status(403).json({ error: 'Forbidden: You can only update your own ideas' });
+    }
+
     const updated = await service.updateIdeaService(id, req.body);
     res.json(updated);
   } catch (err: any) {
-    res.status(404).json({ error: err.message });
+    console.error('Update error:', err);
+
+    if (err.message === 'Idea not found') {
+      return res.status(404).json({ error: 'Idea not found' });
+    }
+
+    res.status(500).json({ error: err.message });
   }
 };
+
 export const deleteIdeaHandler = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   try {
