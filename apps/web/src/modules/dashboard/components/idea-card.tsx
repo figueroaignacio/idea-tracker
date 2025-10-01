@@ -1,5 +1,10 @@
+// Components
 import { Archive, CheckCircle, MoreHorizontal, Play, Trash2 } from 'lucide-react';
+
+// Lib
 import { PRIORITY_COLORS, STATUS_COLORS, STATUS_ICONS } from '../lib/constants';
+
+// Types
 import type { Idea } from '../types/idea';
 
 interface IdeaCardProps {
@@ -27,7 +32,6 @@ export function IdeaCard({ idea, onUpdateIdea, onDeleteIdea }: IdeaCardProps) {
   );
 }
 
-// Subcomponents
 function CardHeader({
   idea,
   onStatusChange,
@@ -58,43 +62,51 @@ function CardMenu({
   onStatusChange: (status: Idea['status']) => void;
   onDelete: () => void;
 }) {
+  const menuItems = [
+    {
+      label: 'Mark as In Progress',
+      icon: Play,
+      onClick: () => onStatusChange('in-progress'),
+    },
+    {
+      label: 'Mark as Completed',
+      icon: CheckCircle,
+      onClick: () => onStatusChange('completed'),
+    },
+    {
+      label: 'Archive',
+      icon: Archive,
+      onClick: () => onStatusChange('archived'),
+    },
+    {
+      label: 'Delete',
+      icon: Trash2,
+      onClick: onDelete,
+      className: 'text-error hover:text-error',
+    },
+  ];
+
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-sm">
         <MoreHorizontal className="w-4 h-4" />
       </div>
       <ul className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow border border-base-300">
-        <li>
-          <button onClick={() => onStatusChange('in-progress')}>
-            <Play className="w-4 h-4" />
-            Marcar en progreso
-          </button>
-        </li>
-        <li>
-          <button onClick={() => onStatusChange('completed')}>
-            <CheckCircle className="w-4 h-4" />
-            Marcar completada
-          </button>
-        </li>
-        <li>
-          <button onClick={() => onStatusChange('archived')}>
-            <Archive className="w-4 h-4" />
-            Archivar
-          </button>
-        </li>
-        <li>
-          <button onClick={onDelete} className="text-error hover:text-error">
-            <Trash2 className="w-4 h-4" />
-            Eliminar
-          </button>
-        </li>
+        {menuItems.map(({ label, icon: Icon, onClick, className }, index) => (
+          <li key={index}>
+            <button onClick={onClick} className={className}>
+              <Icon className="w-4 h-4" />
+              {label}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   );
 }
 
 function CardDescription({ description }: { description: string }) {
-  return <p className="text-sm text-base-content/70  text-pretty">{description}</p>;
+  return <p className="text-sm text-base-content/70 text-pretty">{description}</p>;
 }
 
 function CardTags({ tags }: { tags: string[] }) {
@@ -115,9 +127,9 @@ function CardTags({ tags }: { tags: string[] }) {
 function CardFooter({ idea }: { idea: Idea }) {
   const StatusIcon = STATUS_ICONS[idea.status];
   const statusText = {
-    'in-progress': 'En progreso',
-    completed: 'Completada',
-    archived: 'Archivada',
+    'in-progress': 'In progress',
+    completed: 'Completed',
+    archived: 'Archived',
     idea: 'Idea',
   }[idea.status];
 
