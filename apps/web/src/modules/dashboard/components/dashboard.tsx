@@ -10,6 +10,7 @@ import { IdeaGrid } from './dashboard-grid';
 import { DashboardHeader } from './dashboard-header';
 
 // Types
+import { LoadingDots } from '../../../components/loading-dots';
 import type { Idea } from '../types/idea';
 
 export function Dashboard() {
@@ -156,7 +157,9 @@ export function Dashboard() {
         />
         <div className="flex-1 overflow-auto p-6">
           {loading ? (
-            <p className="text-center text-base-content/50">Cargando ideas...</p>
+            <div className="min-h-full flex justify-center items-center">
+              <LoadingDots />
+            </div>
           ) : error ? (
             <p className="text-center text-error">{error}</p>
           ) : (
