@@ -1,6 +1,26 @@
 import { config } from '../../../config/config';
 
-let accessToken: string | null = null;
+const TOKEN_KEY = 'accessToken';
+
+// Guardar y recuperar del sessionStorage
+const getStoredToken = (): string | null => {
+  return sessionStorage.getItem(TOKEN_KEY);
+};
+
+const setStoredToken = (token: string | null) => {
+  if (token) {
+    sessionStorage.setItem(TOKEN_KEY, token);
+  } else {
+    sessionStorage.removeItem(TOKEN_KEY);
+  }
+};
+
+let accessToken: string | null = getStoredToken();
+
+export const setAccessToken = (token: string | null) => {
+  accessToken = token;
+  setStoredToken(token);
+};
 
 export const refreshAccessToken = async () => {
   const res = await fetch(`${config.apiUrl}/api/auth/refresh`, {
@@ -9,8 +29,8 @@ export const refreshAccessToken = async () => {
   });
   if (!res.ok) throw new Error('Cannot refresh token');
   const data = await res.json();
-  accessToken = data.accessToken;
-  return accessToken;
+  setAccessToken(data.accessToken);
+  return data.accessToken;
 };
 
 export const getMe = async () => {
@@ -38,9 +58,39 @@ export const getMe = async () => {
 };
 
 export const clearAccessToken = (): void => {
-  accessToken = null;
+  setAccessToken(null);
 };
 
-export const hasValidToken = (): boolean => {
-  return accessToken !== null;
+export const authenticatedFetch = async (
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> => {
+  if (!accessToken) {
+    await refreshAccessToken();
+  }
+
+  const headers = {
+    ...options.headers,
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  let res = await fetch(url, {
+    ...options,
+    headers,
+    credentials: 'include',
+  });
+
+  if (res.status === 401) {
+    await refreshAccessToken();
+    res = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: 'include',
+    });
+  }
+
+  return res;
 };

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { Request, Response } from 'express';
 import config from '../../config/config';
-import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../../shared/utils/jwt';
+import { signAccessToken, verifyRefreshToken } from '../../shared/utils/jwt';
 import * as repo from './auth.repository';
 import * as service from './auth.service';
 
@@ -81,11 +81,7 @@ export const refreshHandler = async (req: Request, res: Response) => {
     }
 
     const newAccess = signAccessToken({ sub: user.id, email: user.email });
-    const newRefresh = signRefreshToken({ sub: user.id });
-    const newHashed = crypto.createHash('sha256').update(newRefresh).digest('hex');
-    await repo.updateRefreshToken(user.id, newHashed);
 
-    res.cookie('refreshToken', newRefresh, cookieOptions);
     res.json({ accessToken: newAccess });
   } catch (err: any) {
     res.status(500).json({ error: err.message });

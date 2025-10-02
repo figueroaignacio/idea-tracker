@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { config } from '../../../config/config';
 import { type User } from '../../user/types';
 import AuthContext, { type AuthContextType } from '../context/auth-context';
-import { getMe, refreshAccessToken } from '../services/auth-services';
+import {
+  clearAccessToken,
+  getMe,
+  refreshAccessToken,
+  setAccessToken,
+} from '../services/auth-services';
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -44,6 +49,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         body: JSON.stringify({ email, password }),
       });
       if (!res.ok) throw new Error('Login failed');
+
+      const data = await res.json();
+      // Guardar el accessToken que devuelve el backend
+      setAccessToken(data.accessToken);
+
       await fetchUser();
     } catch (error) {
       setUser(null);
@@ -68,6 +78,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         body: JSON.stringify({ firstName, lastName, email, password }),
       });
       if (!res.ok) throw new Error('Signup failed');
+
+      const data = await res.json();
+      // Guardar el accessToken que devuelve el backend
+      setAccessToken(data.accessToken);
+
       await fetchUser();
     } catch (error) {
       setUser(null);
@@ -87,6 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('Error during logout:', error);
     } finally {
+      clearAccessToken();
       setUser(null);
       setLoading(false);
     }
